@@ -345,491 +345,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================================================
-    // 5. RSVP 多步驟表單邏輯 (Multi-step Form)
+    // 5. RSVP 表單點擊跳轉 (Google Form Redirect with heart burst animation)
     // ==========================================================================
-    const form = document.getElementById('wedding-rsvp-form');
-    const steps = document.querySelectorAll('.form-step');
-    const progressBar = document.getElementById('rsvp-progress');
-    const stepNumText = document.getElementById('current-step-num');
-    
-    const prevStepBtn = document.getElementById('prev-btn');
-    const nextStepBtn = document.getElementById('next-btn');
-    const submitStepBtn = document.getElementById('submit-btn');
-    const successScreen = document.getElementById('rsvp-success-screen');
+    const redirectBtn = document.getElementById('rsvp-redirect-btn');
+    const loadingBox = document.getElementById('rsvp-loading-box');
 
-    let currentStep = 1;
-    const totalSteps = 6;
-
-    // 偵測出席狀態以進行步驟跳轉
-    function getAttendanceStatus() {
-        const selected = document.querySelector('input[name="attendance"]:checked');
-        return selected ? selected.value : 'attend';
-    }
-
-    // 計算下一個或上一個應該到達的步驟（跳過條件區段）
-    function getNextTargetStep(direction) {
-        const attendance = getAttendanceStatus();
+    // 點擊按鈕時飄出滿滿愛心的特效
+    function spawnFloatingHeart(x, y) {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.style.position = 'fixed';
+        heart.style.left = x + 'px';
+        heart.style.top = y + 'px';
+        heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+        heart.style.pointerEvents = 'none';
+        heart.style.zIndex = '99999';
+        heart.style.transition = 'all 1.2s cubic-bezier(0.25, 1, 0.5, 1)';
         
-        if (attendance !== 'attend') {
-            // 如果不出席或僅禮到，跳過步驟 3, 4, 5，直接到 6 (祝福)
-            if (direction === 'next') {
-                if (currentStep === 2) return 6;
-            } else if (direction === 'prev') {
-                if (currentStep === 6) return 2;
-            }
-        }
+        document.body.appendChild(heart);
         
-        return direction === 'next' ? currentStep + 1 : currentStep - 1;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 80 + 40;
+        const destX = x + Math.cos(angle) * distance;
+        const destY = y + Math.sin(angle) * distance - 80;
+        
+        setTimeout(() => {
+            heart.style.transform = `translate(${destX - x}px, ${destY - y}px) scale(0.5) rotate(${Math.random() * 90 - 45}deg)`;
+            heart.style.opacity = '0';
+        }, 10);
+        
+        setTimeout(() => {
+            heart.remove();
+        }, 1200);
     }
 
-    // 更新進度條與按鈕文字
-    function updateFormNavigation() {
-        steps.forEach(step => {
-            step.classList.remove('active');
-            if (parseInt(step.getAttribute('data-step')) === currentStep) {
-                step.classList.add('active');
-            }
-        });
-
-        // 更新進度條寬度
-        const progressPercentage = (currentStep / totalSteps) * 100;
-        progressBar.style.width = `${progressPercentage}%`;
-        stepNumText.textContent = currentStep;
-
-        // 上一步按鈕狀態
-        prevStepBtn.disabled = currentStep === 1;
-
-        // 下一步與送出按鈕切換
-        if (currentStep === totalSteps) {
-            nextStepBtn.style.display = 'none';
-            submitStepBtn.style.display = 'block';
-        } else {
-            nextStepBtn.style.display = 'block';
-            submitStepBtn.style.display = 'none';
-        }
-    }
-
-    // 欄位防呆驗證
-    function validateStep(step) {
-        let isValid = true;
-        const currentStepEl = document.querySelector(`.form-step[data-step="${step}"]`);
-        if (!currentStepEl) return true;
-
-        // 驗證必填文字與電話欄位
-        const requiredInputs = currentStepEl.querySelectorAll('input[required], textarea[required]');
-        requiredInputs.forEach(input => {
-            const formGroup = input.closest('.form-group');
-            if (!input.value.trim()) {
-                isValid = false;
-                if (formGroup) formGroup.classList.add('has-error');
-            } else {
-                if (formGroup) formGroup.classList.remove('has-error');
-                
-                // 額外驗證電話格式 (若為電話欄位)
-                if (input.type === 'tel') {
-                    const phonePattern = /^09\d{8}$/;
-                    if (!phonePattern.test(input.value.replace(/[-\s]/g, ''))) {
-                        isValid = false;
-                        if (formGroup) {
-                            formGroup.classList.add('has-error');
-                            formGroup.querySelector('.error-msg').textContent = '請輸入正確的 10 碼行動電話（如：0912345678）';
-                        }
-                    } else {
-                        if (formGroup) formGroup.classList.remove('has-error');
-                    }
-                }
-            }
-        });
-
-        // 驗證必填單選按鈕
-        const radioGroups = {};
-        const requiredRadios = currentStepEl.querySelectorAll('input[type="radio"][required]');
-        requiredRadios.forEach(radio => {
-            radioGroups[radio.name] = true;
-        });
-
-        for (const name in radioGroups) {
-            const selected = currentStepEl.querySelector(`input[name="${name}"]:checked`);
-            const groupContainer = currentStepEl.querySelector('.option-card-group') || currentStepEl.querySelector('.radio-pill-group');
-            if (!selected) {
-                isValid = false;
-                if (groupContainer) groupContainer.style.borderColor = '#c95d5d';
-            } else {
-                if (groupContainer) groupContainer.style.borderColor = '';
-            }
-        }
-
-        return isValid;
-    }
-
-    // 移除驗證錯誤 class
-    form.addEventListener('input', (e) => {
-        const formGroup = e.target.closest('.form-group');
-        if (formGroup && formGroup.classList.contains('has-error')) {
-            formGroup.classList.remove('has-error');
-        }
-    });
-
-    // 「下一步」點擊事件
-    nextStepBtn.addEventListener('click', () => {
-        if (validateStep(currentStep)) {
-            currentStep = getNextTargetStep('next');
-            updateFormNavigation();
-            // 自動滾動到表單頂部
-            document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-
-    // 「上一步」點擊事件
-    prevStepBtn.addEventListener('click', () => {
-        currentStep = getNextTargetStep('prev');
-        updateFormNavigation();
-        document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
-    });
-
-
-    // ==========================================================================
-    // 6. 數字增減器功能 (Counter Controller) & 連動邏輯
-    // ==========================================================================
-    const counterButtons = document.querySelectorAll('.counter-btn');
-    const adultInput = document.getElementById('adult-count');
-    const meatInput = document.getElementById('meat-count');
-    const vegInput = document.getElementById('veg-count');
-
-    // 連動邏輯：預設葷食席位 = 大人人數
-    function syncDietWithAdults(newAdultVal) {
-        const currentVeg = parseInt(vegInput.value);
-        if (currentVeg === 0) {
-            meatInput.value = newAdultVal;
-        } else {
-            // 讓葷素總和維持與大人人數一致
-            if (currentVeg >= newAdultVal) {
-                vegInput.value = newAdultVal;
-                meatInput.value = 0;
-            } else {
-                meatInput.value = newAdultVal - currentVeg;
-            }
-        }
-    }
-
-    counterButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    if (redirectBtn && loadingBox) {
+        redirectBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const targetId = btn.getAttribute('data-target');
-            const input = document.getElementById(targetId);
-            let val = parseInt(input.value);
-            const min = parseInt(input.getAttribute('min') || 0);
-            const max = parseInt(input.getAttribute('max') || 10);
-
-            if (btn.classList.contains('plus')) {
-                if (val < max) val++;
-            } else {
-                if (val > min) val--;
-            }
-
-            input.value = val;
-
-            // 觸發連動
-            if (targetId === 'adult-count') {
-                syncDietWithAdults(val);
+            
+            // 取得按鈕座標中心點
+            const rect = redirectBtn.getBoundingClientRect();
+            const btnX = rect.left + rect.width / 2;
+            const btnY = rect.top + rect.height / 2;
+            
+            // 噴灑愛心效果
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    spawnFloatingHeart(btnX + (Math.random() * 40 - 20), btnY + (Math.random() * 20 - 10));
+                }, i * 35);
             }
             
-            // 葷素人數改變時，動態微調以符合大人總數
-            if (targetId === 'meat-count' || targetId === 'veg-count') {
-                const totalAdults = parseInt(adultInput.value);
-                const meat = parseInt(meatInput.value);
-                const veg = parseInt(vegInput.value);
-
-                if (meat + veg !== totalAdults) {
-                    if (targetId === 'meat-count') {
-                        // 調整素食
-                        vegInput.value = Math.max(0, totalAdults - meat);
-                    } else {
-                        // 調整葷食
-                        meatInput.value = Math.max(0, totalAdults - veg);
-                    }
-                }
-            }
-        });
-    });
-
-
-    // ==========================================================================
-    // 7. 表單提交、Local Storage 快取與五彩紙屑慶祝 (Confetti)
-    // ==========================================================================
-    const successName = document.getElementById('confirmed-guest-name');
-    const summaryList = document.getElementById('confirmed-details-list');
-    const editRsvpBtn = document.getElementById('edit-rsvp-btn');
-
-    // 檢查 Local Storage 是否可用 (防範 Safari file:// 本地瀏覽時的 SecurityError)
-    function safeGetLocalStorage(key) {
-        try {
-            return localStorage.getItem(key);
-        } catch (e) {
-            console.warn("LocalStorage is not accessible:", e);
-            return null;
-        }
-    }
-
-    function safeSetLocalStorage(key, value) {
-        try {
-            localStorage.setItem(key, value);
-        } catch (e) {
-            console.warn("LocalStorage setItem failed:", e);
-        }
-    }
-
-    // 檢查 Local Storage 是否已有填寫紀錄
-    const cachedRSVP = safeGetLocalStorage('wedding_rsvp_xiangyu_lihong');
-    if (cachedRSVP) {
-        showSuccessState(JSON.parse(cachedRSVP));
-    }
-
-    // 串接 Google 表單發送
-    function submitToGoogleForm(data) {
-        // Google 表單發送後台網址
-        const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd4PFyKDrAIFH4j_sWGOrh-QMzOIPIfWo5CqK_a5luF5oUTTQ/formResponse';
-        
-        // 欄位代碼映射表 (若您找到 entry.xxx 代碼，請替換冒號右側的預設 entry 字串)
-        const fieldMapping = {
-            'name': 'entry.1812836262',        // 姓名 欄位
-            'phone': 'entry.390022718',        // 聯絡電話 欄位
-            'attendance': 'entry.101738722',   // 出席意願 欄位
-            'relation': 'entry.128766155',     // 親友關係 欄位
-            'adult_count': 'entry.198372671',  // 出席大人人數 欄位
-            'kid_count': 'entry.1742055627',   // 出席幼童人數 欄位
-            'meat_count': 'entry.209381711',   // 葷食人數 欄位
-            'veg_count': 'entry.155739017',    // 素食人數 欄位
-            'chair_count': 'entry.184758291',  // 嬰兒座椅數量 欄位
-            'transport': 'entry.990429402',    // 交通方式 欄位
-            'wishes': 'entry.209381735'        // 給新人的祝福話語 欄位
-        };
-
-        const formBody = new URLSearchParams();
-        
-        // 填充資料到 POST 表單中
-        for (const [key, value] of Object.entries(data)) {
-            const googleField = fieldMapping[key];
-            if (googleField) {
-                formBody.append(googleField, value || '');
-            }
-        }
-
-        // 以 no-cors 模式發送非同步 POST 請求，防止跨網域錯誤阻擋提交
-        fetch(googleFormUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: formBody
-        })
-        .then(() => {
-            console.log('表單資料已自動發送對應至 Google 表單後台 (no-cors)');
-        })
-        .catch((error) => {
-            console.error('發送表單至 Google 失敗:', error);
-        });
-    }
-
-    // 提交表單
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        if (!validateStep(currentStep)) return;
-
-        const formData = new FormData(form);
-        const data = {};
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
-
-        // 存檔至 Local Storage
-        safeSetLocalStorage('wedding_rsvp_xiangyu_lihong', JSON.stringify(data));
-
-        // 發送至 Google 表單後台
-        submitToGoogleForm(data);
-
-        // 觸發成功畫面與慶祝
-        showSuccessState(data);
-        triggerConfetti();
-        document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // 顯示成功畫面與摘要
-    function showSuccessState(data) {
-        form.style.display = 'none';
-        successScreen.style.display = 'block';
-        
-        successName.textContent = data.name;
-        
-        // 編譯親切的摘要列表
-        let summaryHTML = '';
-        
-        const attendanceMap = {
-            'attend': '🎉 準時出席婚宴',
-            'gift': '✉️ 禮到人不到',
-            'decline': '❤️ 祝福滿滿，不克出席'
-        };
-
-        const relationMap = {
-            'groom': '男方親友 (祥宇)',
-            'bride': '女方親友 (麗紘)',
-            'both': '共同好友'
-        };
-
-        const transportMap = {
-            'drive': '自行開車 🚗',
-            'shuttle': '搭乘大眾運輸 🚌',
-            'other': '其他方式 / 步行 🚶'
-        };
-
-        summaryHTML += `<li><span>出席狀態</span><span>${attendanceMap[data.attendance] || '已送出'}</span></li>`;
-        summaryHTML += `<li><span>聯絡電話</span><span>${data.phone}</span></li>`;
-
-        if (data.attendance === 'attend') {
-            summaryHTML += `<li><span>親友關係</span><span>${relationMap[data.relation] || '親友'}</span></li>`;
-            summaryHTML += `<li><span>出席人數</span><span>大人：${data.adult_count} 人，兒童：${data.kid_count} 人</span></li>`;
-            summaryHTML += `<li><span>餐點安排</span><span>葷：${data.meat_count} 位，素：${data.veg_count} 位</span></li>`;
-            if (parseInt(data.chair_count) > 0) {
-                summaryHTML += `<li><span>幼兒座椅</span><span>${data.chair_count} 張</span></li>`;
-            }
-            summaryHTML += `<li><span>交通方式</span><span>${transportMap[data.transport] || '自理'}</span></li>`;
-        }
-
-        summaryHTML += `<li class="flex-column" style="flex-direction:column; gap:4px; margin-top:10px; border-top:1px dashed rgba(95, 116, 100, 0.2); padding-top:10px;">` +
-                       `<span style="width:100%; display:block;">給新人的祝福：</span>` +
-                       `<span style="width:100%; display:block; font-style:italic; font-weight:normal !important; color:var(--text-muted); margin-top:2px;">「 ${data.wishes} 」</span></li>`;
-
-        summaryList.innerHTML = summaryHTML;
-    }
-
-    // 修改回覆按鈕
-    editRsvpBtn.addEventListener('click', () => {
-        // 從 cache 讀取，並填回表單
-        const cachedData = safeGetLocalStorage('wedding_rsvp_xiangyu_lihong');
-        if (cachedData) {
-            const data = JSON.parse(cachedData);
+            // 按鈕動態回彈與縮小
+            redirectBtn.style.transform = 'scale(0.95)';
+            redirectBtn.style.opacity = '0.7';
+            redirectBtn.style.pointerEvents = 'none';
             
-            // 填回一般 input
-            document.getElementById('guest-name').value = data.name || '';
-            document.getElementById('guest-phone').value = data.phone || '';
-            document.getElementById('wishes').value = data.wishes || '';
-
-            // 填回 radio
-            const attendanceRadio = form.querySelector(`input[name="attendance"][value="${data.attendance}"]`);
-            if (attendanceRadio) attendanceRadio.checked = true;
-
-            const relationRadio = form.querySelector(`input[name="relation"][value="${data.relation}"]`);
-            if (relationRadio) relationRadio.checked = true;
-
-            const transportRadio = form.querySelector(`input[name="transport"][value="${data.transport}"]`);
-            if (transportRadio) transportRadio.checked = true;
-
-            // 填回數字計數器
-            document.getElementById('adult-count').value = data.adult_count || 1;
-            document.getElementById('kid-count').value = data.kid_count || 0;
-            document.getElementById('meat-count').value = data.meat_count || 1;
-            document.getElementById('veg-count').value = data.veg_count || 0;
-            document.getElementById('chair-count').value = data.chair_count || 0;
-        }
-
-        // 切回表單畫面
-        successScreen.style.display = 'none';
-        form.style.display = 'block';
-        currentStep = 1;
-        updateFormNavigation();
-        document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // 自訂 Canvas 五彩碎紙效果
-    function triggerConfetti() {
-        const canvas = document.createElement('canvas');
-        canvas.style.position = 'fixed';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.width = '100vw';
-        canvas.style.height = '100vh';
-        canvas.style.pointerEvents = 'none';
-        canvas.style.zIndex = '9999';
-        document.body.appendChild(canvas);
-
-        const ctx = canvas.getContext('2d');
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+            // 顯示載入文字
+            loadingBox.style.display = 'block';
+            
+            // 延遲 1.2 秒後進行頁面跳轉
+            setTimeout(() => {
+                window.location.href = 'https://forms.gle/2Jqroc6Yz7DrAyEaA';
+            }, 1200);
         });
-
-        const colors = ['#5f7464', '#c8a97e', '#ab8d61', '#f0f4f1', '#e8cfa9', '#ffffff'];
-        const confettiCount = 150;
-        const confettis = [];
-
-        class ConfettiParticle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height - height; // 在上方出生
-                this.size = Math.random() * 8 + 4;
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.speed = Math.random() * 5 + 3;
-                this.angle = Math.random() * Math.PI * 2;
-                this.rotationSpeed = Math.random() * 0.2 - 0.1;
-                this.oscillationSpeed = Math.random() * 0.1;
-                this.oscillationRange = Math.random() * 2;
-            }
-
-            update() {
-                this.y += this.speed;
-                this.angle += this.rotationSpeed;
-                this.x += Math.sin(this.angle * this.oscillationSpeed) * this.oscillationRange;
-
-                // 超出邊界回收
-                if (this.y > height) {
-                    this.y = -20;
-                    this.x = Math.random() * width;
-                }
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.fillStyle = this.color;
-                // 畫一個扁平矩形（模擬彩帶紙片旋轉）
-                ctx.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < confettiCount; i++) {
-            confettis.push(new ConfettiParticle());
-        }
-
-        let animationFrameId;
-        let framesRun = 0;
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-
-            confettis.forEach(c => {
-                c.update();
-                c.draw();
-            });
-
-            framesRun++;
-            if (framesRun < 240) { // 持續約 4 秒（60fps * 4 = 240幀）
-                animationFrameId = requestAnimationFrame(animate);
-            } else {
-                cancelAnimationFrame(animationFrameId);
-                canvas.remove(); // 結束後移除畫布
-            }
-        }
-
-        animate();
     }
-
 
     // ==========================================================================
     // 8. 加入行事曆整合功能 (Google Calendar & Apple/Outlook ICS)

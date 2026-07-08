@@ -604,8 +604,6 @@
             </div>
         </section>
 
-
-
         <!-- 6. RSVP Section (出席調查表) -->
         <section id="rsvp" class="rsvp-section section-padding">
             <div class="container">
@@ -616,213 +614,24 @@
                     <p class="section-desc">為了我們能更完美地款待各位，請協助新人在 <b>2026年8月31日</b> 前填寫此表單喔！</p>
                 </div>
 
-                <!-- Multi-step Form Card -->
-                <div class="rsvp-form-card scroll-reveal">
-                    <!-- Progress bar -->
-                    <div class="rsvp-progress-container">
-                        <div class="rsvp-progress-bar" id="rsvp-progress"></div>
-                        <div class="rsvp-progress-text">第 <span id="current-step-num">1</span> / 6 個區段</div>
-                    </div>
-
-                    <form id="wedding-rsvp-form">
-                        
-                        <!-- STEP 1: Basic Information -->
-                        <div class="form-step active" data-step="1">
-                            <h3 class="step-title">基本資料</h3>
-                            <div class="form-group">
-                                <label for="guest-name">您的姓名 <span class="required">*</span></label>
-                                <input type="text" id="guest-name" name="name" placeholder="請輸入您的真實姓名" required>
-                                <span class="error-msg">請填寫此欄位</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="guest-phone">聯絡電話 <span class="required">*</span></label>
-                                <input type="tel" id="guest-phone" name="phone" placeholder="例如：0912345678" required>
-                                <span class="error-msg">請填寫正確的手機格式</span>
-                            </div>
-                        </div>
-
-                        <!-- STEP 2: Attendance -->
-                        <div class="form-step" data-step="2">
-                            <h3 class="step-title">出席意願 <span class="required">*</span></h3>
-                            <p class="step-subtitle">請問您是否出席婚宴？</p>
-                            
-                            <div class="option-card-group">
-                                <label class="option-card">
-                                    <input type="radio" name="attendance" value="attend" required checked>
-                                    <div class="option-card-content">
-                                        <div class="option-icon">🎉</div>
-                                        <div class="option-title">同樂！我會準時出席</div>
-                                        <div class="option-desc">期待與你們共享這喜悅的日子！</div>
-                                    </div>
-                                </label>
-                                
-                                <label class="option-card">
-                                    <input type="radio" name="attendance" value="gift">
-                                    <div class="option-card-content">
-                                        <div class="option-icon">✉️</div>
-                                        <div class="option-title">禮到！人無法到場</div>
-                                        <div class="option-desc">心意不缺席，會提前寄送祝福。</div>
-                                    </div>
-                                </label>
-
-                                <label class="option-card">
-                                    <input type="radio" name="attendance" value="decline">
-                                    <div class="option-card-content">
-                                        <div class="option-icon">❤️</div>
-                                        <div class="option-title">不克出席，寄予深深祝福</div>
-                                        <div class="option-desc">很遺憾無法前往，祝你們幸福美滿！</div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- STEP 3: Relationship & Guest Count (Conditional) -->
-                        <div class="form-step" data-step="3" id="step-relationship">
-                            <h3 class="step-title">親友關係與人數</h3>
-                            
-                            <div class="form-group">
-                                <label>您是哪一方的親友？ <span class="required">*</span></label>
-                                <div class="radio-pill-group">
-                                    <label class="radio-pill">
-                                        <input type="radio" name="relation" value="groom" checked>
-                                        <span>男方親友 (祥宇)</span>
-                                    </label>
-                                    <label class="radio-pill">
-                                        <input type="radio" name="relation" value="bride">
-                                        <span>女方親友 (麗紘)</span>
-                                    </label>
-                                    <label class="radio-pill">
-                                        <input type="radio" name="relation" value="both">
-                                        <span>共同好友</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-row count-selectors-row">
-                                <div class="form-group">
-                                    <label>出席大人人數 <span class="required">*</span></label>
-                                    <div class="number-counter">
-                                        <button type="button" class="counter-btn minus" data-target="adult-count">-</button>
-                                        <input type="number" id="adult-count" name="adult_count" value="1" min="1" max="10" readonly>
-                                        <button type="button" class="counter-btn plus" data-target="adult-count">+</button>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>出席幼童人數 (不佔位)</label>
-                                    <div class="number-counter">
-                                        <button type="button" class="counter-btn minus" data-target="kid-count">-</button>
-                                        <input type="number" id="kid-count" name="kid_count" value="0" min="0" max="10" readonly>
-                                        <button type="button" class="counter-btn plus" data-target="kid-count">+</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- STEP 4: Dietary & Special Needs (Conditional) -->
-                        <div class="form-step" data-step="4" id="step-diet">
-                            <h3 class="step-title">餐飲與特殊需求</h3>
-                            
-                            <div class="form-group">
-                                <label>請問您的飲食需求是？ <span class="required">*</span></label>
-                                <div class="diet-inputs">
-                                    <div class="form-row">
-                                        <span>葷食席位人數</span>
-                                        <div class="number-counter sm">
-                                            <button type="button" class="counter-btn minus" data-target="meat-count">-</button>
-                                            <input type="number" id="meat-count" name="meat_count" value="1" min="0" max="10" readonly>
-                                            <button type="button" class="counter-btn plus" data-target="meat-count">+</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <span>素食席位人數</span>
-                                        <div class="number-counter sm">
-                                            <button type="button" class="counter-btn minus" data-target="veg-count">-</button>
-                                            <input type="number" id="veg-count" name="veg_count" value="0" min="0" max="10" readonly>
-                                            <button type="button" class="counter-btn plus" data-target="veg-count">+</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>幼兒座椅需求數量</label>
-                                <div class="number-counter">
-                                    <button type="button" class="counter-btn minus" data-target="chair-count">-</button>
-                                    <input type="number" id="chair-count" name="chair_count" value="0" min="0" max="5" readonly>
-                                    <button type="button" class="counter-btn plus" data-target="chair-count">+</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- STEP 5: Transportation (Conditional) -->
-                        <div class="form-step" data-step="5" id="step-transport">
-                            <h3 class="step-title">交通資訊統計</h3>
-                            <p class="step-subtitle">請問您這天預計以何種方式前往會場？</p>
-                            
-                            <div class="option-card-group">
-                                <label class="option-card">
-                                    <input type="radio" name="transport" value="drive" required checked>
-                                    <div class="option-card-content">
-                                        <div class="option-icon">🚗</div>
-                                        <div class="option-title">自行開車</div>
-                                        <div class="option-desc">我會開車前來（餐廳旁備有停車場）</div>
-                                    </div>
-                                </label>
-
-                                <label class="option-card">
-                                    <input type="radio" name="transport" value="shuttle">
-                                    <div class="option-card-content">
-                                        <div class="option-icon">🚌</div>
-                                        <div class="option-title">希望搭乘大眾運輸</div>
-                                        <div class="option-desc">抵達鄰近車站後轉搭計程車或公車。</div>
-                                    </div>
-                                </label>
-                                
-                                <label class="option-card">
-                                    <input type="radio" name="transport" value="other">
-                                    <div class="option-card-content">
-                                        <div class="option-icon">🚶</div>
-                                        <div class="option-title">其他方式 / 在地居民</div>
-                                        <div class="option-desc">散步、騎車或其他方式抵達。</div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- STEP 6: Wishes & Submit -->
-                        <div class="form-step" data-step="6">
-                            <h3 class="step-title">給新人的溫馨祝福</h3>
-                            <div class="form-group">
-                                <label for="wishes">留下祝福的話語 <span class="required">*</span></label>
-                                <textarea id="wishes" name="wishes" rows="4" placeholder="寫下對 祥宇 & 麗紘 的祝福吧！您的支持是我們最大的力量..." required></textarea>
-                                <span class="error-msg">請填寫此欄位，讓新人接收您的溫暖祝福</span>
-                            </div>
-                        </div>
-
-                        <!-- Navigation buttons -->
-                        <div class="form-nav-btn-group">
-                            <button type="button" id="prev-btn" class="btn outline-btn" disabled>上一步</button>
-                            <button type="button" id="next-btn" class="btn primary-btn">下一步</button>
-                            <button type="submit" id="submit-btn" class="btn primary-btn" style="display: none;">送出回覆</button>
-                        </div>
-
-                    </form>
-
-                    <!-- Submission Success Screen -->
-                    <div id="rsvp-success-screen" class="rsvp-success-screen" style="display: none;">
-                        <div class="success-icon">💐</div>
-                        <h3 class="success-title">表單送出成功！</h3>
-                        <p class="success-message">親愛的 <span id="confirmed-guest-name">貴賓</span>，我們已成功收到您的回覆。</p>
-                        <p class="success-details">期待與您在 <b>2026年9月27日</b> 相見，您的到來與祝福將是我們最珍貴的禮物！</p>
-                        
-                        <div class="confirmed-summary-box">
-                            <h4>您的填寫摘要：</h4>
-                            <ul id="confirmed-details-list">
-                                <!-- JS will inject summary -->
-                            </ul>
-                        </div>
-
-                        <button type="button" id="edit-rsvp-btn" class="btn outline-btn btn-sm">修改回覆內容</button>
+                <!-- Google Form Redirect Card -->
+                <div class="rsvp-form-card scroll-reveal" style="text-align: center; padding: 50px 30px; max-width: 650px; margin: 0 auto;">
+                    <div class="rsvp-icon-wrapper" style="font-size: 3rem; margin-bottom: 20px;">✉️</div>
+                    <h3 style="font-family: var(--font-serif); font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 15px;">誠摯邀請您參與我們的婚禮</h3>
+                    <p style="font-family: var(--font-sans); color: var(--text-muted); max-width: 500px; margin: 0 auto 30px auto; line-height: 1.8;">
+                        為了我們能更完美地款待各位，請協助新人在 <b>2026年8月31日</b> 前填寫出席調查表單。<br>
+                        點擊下方按鈕即可開啟回覆頁面。
+                    </p>
+                    
+                    <!-- Redirect Button with custom animations -->
+                    <a href="https://forms.gle/2Jqroc6Yz7DrAyEaA" id="rsvp-redirect-btn" class="btn primary-btn btn-lg" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 36px; font-size: 1.1rem; border-radius: 30px; box-shadow: 0 8px 20px rgba(95, 116, 100, 0.15); transition: all 0.3s ease; text-decoration: none; cursor: pointer;">
+                        <span>點此填寫出席回覆</span>
+                        <span class="btn-arrow" style="transition: transform 0.3s ease;">➔</span>
+                    </a>
+                    
+                    <!-- Loading transition text -->
+                    <div id="rsvp-loading-box" style="display: none; margin-top: 25px; font-family: var(--font-sans); color: var(--accent); font-weight: bold; animation: pulseText 1.2s infinite;">
+                        <span style="font-size: 1.2rem; margin-right: 6px;">💖</span> 正在為您開啟出席表單，請稍候...
                     </div>
                 </div>
             </div>
