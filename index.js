@@ -271,28 +271,34 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePhotoUrls();
 
     function openLightbox(index) {
+        if (!lightbox || !lightboxImg) return;
         updatePhotoUrls();
         currentPhotoIndex = index;
         if (photoUrls[currentPhotoIndex]) {
-            lightboxImg.src = photoUrls[currentPhotoIndex];
-            lightbox.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // 鎖定背景捲動
+            try {
+                lightboxImg.src = photoUrls[currentPhotoIndex];
+                lightbox.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // 鎖定背景捲動
+            } catch (err) {
+                console.error("openLightbox error: ", err);
+            }
         }
     }
 
     function closeLightbox() {
+        if (!lightbox) return;
         lightbox.style.display = 'none';
         document.body.style.overflow = ''; // 恢復背景捲動
     }
 
     function showPrevPhoto() {
-        if (photoUrls.length === 0) return;
+        if (!lightboxImg || photoUrls.length === 0) return;
         currentPhotoIndex = (currentPhotoIndex - 1 + photoUrls.length) % photoUrls.length;
         lightboxImg.src = photoUrls[currentPhotoIndex];
     }
 
     function showNextPhoto() {
-        if (photoUrls.length === 0) return;
+        if (!lightboxImg || photoUrls.length === 0) return;
         currentPhotoIndex = (currentPhotoIndex + 1) % photoUrls.length;
         lightboxImg.src = photoUrls[currentPhotoIndex];
     }
@@ -315,25 +321,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
-    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrevPhoto(); });
-    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNextPhoto(); });
-    
-    // 僅點擊半透明黑底或容器時關閉，點擊圖片本身與導覽按鈕不觸發關閉
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target.classList.contains('lightbox-content-container')) {
-            closeLightbox();
-        }
-    });
+    // 安全防錯事件監聽綁定
+    if (lightbox) {
+        if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+        if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrevPhoto(); });
+        if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNextPhoto(); });
 
-    // 鍵盤導覽
-    document.addEventListener('keydown', (e) => {
-        if (lightbox.style.display === 'block') {
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') showPrevPhoto();
-            if (e.key === 'ArrowRight') showNextPhoto();
-        }
-    });
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.classList.contains('lightbox-content-container')) {
+                closeLightbox();
+            }
+        });
+
+        // 鍵盤導覽
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.style.display === 'block') {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') showPrevPhoto();
+                if (e.key === 'ArrowRight') showNextPhoto();
+            }
+        });
+    }
 
 
     // ==========================================================================
@@ -553,8 +561,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryList = document.getElementById('confirmed-details-list');
     const editRsvpBtn = document.getElementById('edit-rsvp-btn');
 
+    // 檢查 Local Storage 是否可用 (防範 Safari file:// 本地瀏覽時的 SecurityError)
+    function safeGetLocalStorage(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            console.warn("LocalStorage is not accessible:", e);
+            return null;
+        }
+    }
+
+    function safeSetLocalStorage(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (e) {
+            console.warn("LocalStorage setItem failed:", e);
+        }
+    }
+
     // 檢查 Local Storage 是否已有填寫紀錄
-    const cachedRSVP = localStorage.getItem('wedding_rsvp_xiangyu_lihong');
+    const cachedRSVP = safeGetLocalStorage('wedding_rsvp_xiangyu_lihong');
     if (cachedRSVP) {
         showSuccessState(JSON.parse(cachedRSVP));
     }
@@ -619,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 存檔至 Local Storage
-        localStorage.setItem('wedding_rsvp_xiangyu_lihong', JSON.stringify(data));
+        safeSetLocalStorage('wedding_rsvp_xiangyu_lihong', JSON.stringify(data));
 
         // 發送至 Google 表單後台
         submitToGoogleForm(data);
@@ -681,7 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 修改回覆按鈕
     editRsvpBtn.addEventListener('click', () => {
         // 從 cache 讀取，並填回表單
-        const cachedData = localStorage.getItem('wedding_rsvp_xiangyu_lihong');
+        const cachedData = safeGetLocalStorage('wedding_rsvp_xiangyu_lihong');
         if (cachedData) {
             const data = JSON.parse(cachedData);
             
