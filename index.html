@@ -23,6 +23,7 @@
 
     <!-- Splash Screen Overlay (開場前導頁 & 朦朧信封) -->
     <div id="splash-screen" class="splash-screen">
+
         <div class="envelope-container">
             <!-- 3D 信封本體 -->
             <div class="envelope" id="envelope-box">
@@ -62,18 +63,20 @@
                 
                 <!-- 信封前片 (封口遮罩) -->
                 <div class="envelope-front">
-                    <div class="envelope-label">喜帖</div>
+                    <button id="open-envelope-btn" class="envelope-label-btn">
+                        <span>開啟喜帖</span>
+                        <span class="open-btn-heart">❤️</span>
+                    </button>
                 </div>
             </div>
         </div>
+
         <!-- Transition flash overlay -->
         <div class="flash-overlay" id="flash-overlay"></div>
     </div>
 
-    <!-- Background Music -->
-    <audio id="bgm" loop preload="auto">
-        <source src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Gymnopedie_No._1_%28ISRC_USUAN1100787%29.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Background Music (園遊會) -->
+    <audio id="bgm" src="audio/bgm.m4a" loop preload="auto"></audio>
 
     <!-- Floating Audio Control -->
     <div id="music-control" class="music-control" aria-label="播放/暫停背景音樂">
@@ -99,6 +102,7 @@
         <a href="#event" class="nav-dot" title="婚禮資訊"></a>
         <a href="#welcome" class="nav-dot" title="歡迎致詞"></a>
         <a href="#story" class="nav-dot" title="我們的故事"></a>
+        <a href="#engagement-video" class="nav-dot" title="訂婚影片"></a>
         <a href="#gallery" class="nav-dot" title="婚紗畫廊"></a>
         <a href="#rsvp" class="nav-dot" title="出席回覆"></a>
     </nav>
@@ -480,6 +484,25 @@
                             <p class="timeline-desc">接下來我們將在這一天邁向新旅程，在所有至親好友的見證下，交換誓言。邀請大家一同來參與，見證我們生命中最重要的幸福起點。</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.5 Engagement Video Section (訂婚花絮影片) -->
+        <section id="engagement-video" class="video-section section-padding">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="section-subtitle">Engagement Movie</span>
+                    <h2 class="section-title">訂婚花絮影片</h2>
+                    <div class="header-divider"></div>
+                    <p class="section-desc">分享我們訂婚時朋友特別製作的溫馨影片，記錄下這美好的瞬間。</p>
+                </div>
+                
+                <div class="video-wrapper scroll-reveal" style="position: relative; max-width: 800px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(95, 116, 100, 0.15); background: #000; aspect-ratio: 16/9;">
+                    <video id="engagement-video-player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" controls preload="metadata">
+                        <source src="videos/engagement.mp4" type="video/mp4">
+                        您的瀏覽器不支援 HTML5 影片播放。
+                    </video>
                 </div>
             </div>
         </section>

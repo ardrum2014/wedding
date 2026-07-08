@@ -51,6 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', startAutoplay);
     document.addEventListener('touchstart', startAutoplay);
 
+    // 當 HTML5 訂婚影片開始播放時，自動暫停背景音樂
+    const videoPlayer = document.getElementById('engagement-video-player');
+    if (videoPlayer) {
+        videoPlayer.addEventListener('play', () => {
+            if (bgm && !bgm.paused) {
+                bgm.pause();
+                musicControl.classList.remove('playing');
+            }
+        });
+    }
+
 
     // ==========================================================================
     // 2. 倒數計時器 (Countdown Timer)
@@ -245,9 +256,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 8100);
     }
 
-    // 自動啟動前導頁動畫
-    if (splashScreen) {
-        runSplashAnimation();
+    // 當點擊「開啟喜帖」按鈕時，撥放背景音樂並啟動開箱動畫
+    const openBtn = document.getElementById('open-envelope-btn');
+    if (openBtn) {
+        openBtn.addEventListener('click', () => {
+            // 撥放音樂（利用賓客的點擊動作直接解鎖瀏覽器 Autoplay 政策限制）
+            if (bgm.paused) {
+                bgm.play().then(() => {
+                    musicControl.classList.add('playing');
+                }).catch(err => {
+                    console.log("音樂播放失敗，已靜音：", err);
+                });
+            }
+            // 按鈕淡出動效並銷毀
+            openBtn.style.opacity = '0';
+            openBtn.style.transform = 'translateX(-50%) translateY(10px) scale(0.9)';
+            openBtn.style.pointerEvents = 'none';
+            setTimeout(() => {
+                openBtn.remove();
+            }, 300);
+
+            // 啟動 3D 開箱動畫
+            runSplashAnimation();
+        });
     }
 
 
