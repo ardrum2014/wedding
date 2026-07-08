@@ -1,0 +1,2254 @@
+/* ==========================================================================
+   祥宇 & 麗紘 0927 網頁喜帖樣式表 (CSS)
+   設計風格：法式優雅 莫蘭迪鼠尾草綠 (Sage Green) & 奢華香檳金 (Champagne Gold)
+   ========================================================================== */
+
+/* 1. 變數與基礎設定 */
+:root {
+    /* 色彩系統 */
+    --primary: #5f7464;        /* 鼠尾草綠 */
+    --primary-dark: #445448;   /* 深鼠尾草綠 */
+    --primary-light: #f0f4f1;  /* 淺鼠尾草綠 */
+    --accent: #c8a97e;         /* 香檳金 */
+    --accent-dark: #b39266;    /* 深香檳金 */
+    --accent-light: #f9f5f0;   /* 淺香檳金 */
+    --bg-warm: #FAF9F6;        /* 象牙白 */
+    --text-main: #2b3530;      /* 深石墨綠 */
+    --text-muted: #6e7a72;     /* 灰綠色 */
+    
+    /* 磨砂玻璃 (Glassmorphism) */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(95, 116, 100, 0.08);
+    
+    /* 字型定義 */
+    --font-serif: 'Cormorant Garamond', 'Noto Serif TC', serif;
+    --font-cursive: 'Great Vibes', cursive;
+    --font-sans: 'Iansui', 'Noto Serif TC', -apple-system, sans-serif;
+    
+    /* 動畫時間 */
+    --transition-smooth: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    --transition-fast: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 全域重設 */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    background-color: var(--bg-warm);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    overflow-x: hidden;
+    line-height: 1.8;
+}
+
+/* 網頁捲動軸樣式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-warm);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* 實用類別 */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.section-padding {
+    padding: 100px 0;
+}
+
+/* 按鈕樣式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 32px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(95, 116, 100, 0.2);
+}
+
+.outline-btn {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.outline-btn:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+}
+
+.btn-sm {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+}
+
+.btn-gold {
+    border-color: var(--accent);
+    color: var(--accent-dark);
+}
+
+.btn-gold:hover {
+    background: var(--accent-light);
+    color: var(--accent-dark);
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+/* 段落標題 */
+.section-header {
+    margin-bottom: 60px;
+}
+
+.section-subtitle {
+    display: block;
+    font-family: var(--font-cursive);
+    font-size: 2.2rem;
+    color: var(--accent-dark);
+    margin-bottom: 8px;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 0.15em;
+}
+
+.header-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin: 20px auto 0;
+    position: relative;
+}
+
+.header-divider::after {
+    content: "✦";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-warm);
+    padding: 0 8px;
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+.section-desc {
+    margin-top: 16px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   2. 滾動淡入特效 (Scroll Reveal)
+   ========================================================================== */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   3. 音樂播放器與側邊導覽
+   ========================================================================== */
+.music-control {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    padding: 8px 12px;
+    border-radius: 40px;
+    box-shadow: var(--glass-shadow);
+    transition: var(--transition-fast);
+}
+
+.music-control:hover {
+    transform: scale(1.05);
+    border-color: var(--accent);
+}
+
+.music-disc {
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+}
+
+.music-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* 播放中唱片旋轉 */
+.music-control.playing .music-disc {
+    animation: rotateDisc 5s linear infinite;
+}
+
+/* 音符跳動波形 */
+.visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 15px;
+    margin-left: 8px;
+}
+
+.visualizer span {
+    width: 2.5px;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 1px;
+    transition: height 0.3s ease;
+}
+
+.music-control.playing .visualizer span {
+    animation: bounceBar 1.2s ease-in-out infinite alternate;
+}
+
+.music-control.playing .visualizer span:nth-child(2) { animation-delay: 0.15s; }
+.music-control.playing .visualizer span:nth-child(3) { animation-delay: 0.3s; }
+.music-control.playing .visualizer span:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes rotateDisc {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes bounceBar {
+    from { height: 3px; }
+    to { height: 16px; }
+}
+
+/* 側邊導覽圓點 */
+.side-nav {
+    position: fixed;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 99;
+}
+
+.nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(95, 116, 100, 0.2);
+    border: 1px solid transparent;
+    transition: var(--transition-fast);
+}
+
+.nav-dot:hover, .nav-dot.active {
+    background: var(--accent);
+    transform: scale(1.3);
+    box-shadow: 0 0 8px rgba(200, 169, 126, 0.6);
+}
+
+@media (max-width: 768px) {
+    .side-nav {
+        display: none; /* 手機版隱藏圓點導覽以保持畫面乾淨 */
+    }
+}
+
+/* ==========================================================================
+   4. Hero Section (封面區塊)
+   ========================================================================== */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f3f6f4 0%, #FAF9F6 100%);
+    padding: 60px 0;
+    text-align: center;
+}
+
+.hero-bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 30%, rgba(95, 116, 100, 0.03) 100%);
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-subtitle {
+    font-family: var(--font-cursive);
+    font-size: 2.8rem;
+    color: var(--accent-dark);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--primary-dark);
+    margin-bottom: 30px;
+    line-height: 1.2;
+}
+
+.ampersand {
+    font-family: var(--font-cursive);
+    font-size: 3.5rem;
+    color: var(--accent);
+    display: inline-block;
+    margin: 0 10px;
+    vertical-align: middle;
+}
+
+/* 婚紗照相框 */
+.wedding-photo-frame {
+    position: relative;
+    width: 320px;
+    height: 400px;
+    margin-bottom: 35px;
+    border-radius: 160px 160px 0 0; /* 拱門造型 */
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(95, 116, 100, 0.12);
+}
+
+.hero-wedding-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 6s ease;
+}
+
+.wedding-photo-frame:hover .hero-wedding-img {
+    transform: scale(1.08);
+}
+
+.frame-border {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 150px 150px 0 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.hero-message {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    /* 燙金金屬質感漸層 */
+    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8)) drop-shadow(0 1px 2px rgba(191, 149, 63, 0.3));
+    margin-bottom: 12px;
+}
+
+.hero-date {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin-bottom: 35px;
+}
+
+/* 倒數計時器 */
+.countdown-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 45px;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 60px;
+}
+
+.time-num {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.time-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.countdown-separator {
+    font-size: 1.5rem;
+    color: var(--accent);
+    padding-bottom: 15px;
+}
+
+/* 往下滾動指示器 */
+.scroll-down-arrow {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    margin-top: 40px;
+}
+
+.scroll-down-arrow span {
+    position: absolute;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    border-left: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+    transform: rotate(-45deg);
+    animation: scrollDown 2s infinite;
+    opacity: 0;
+}
+
+.scroll-down-arrow span:nth-child(2) {
+    top: 8px;
+    animation-delay: 0.5s;
+}
+
+@keyframes scrollDown {
+    0% { transform: translateY(0) rotate(-45deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(15px) rotate(-45deg); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+    .hero-title { font-size: 2.2rem; }
+    .ampersand { font-size: 2.6rem; }
+    .wedding-photo-frame { width: 260px; height: 325px; }
+    .hero-message { font-size: 1.3rem; }
+    .hero-date { font-size: 1.5rem; }
+    .countdown-container { padding: 10px 15px; gap: 8px; }
+    .time-num { font-size: 1.4rem; }
+}
+
+/* ==========================================================================
+   歡迎致辭區塊 (Welcome Section)
+   ========================================================================== */
+.welcome-section {
+    background: #ffffff;
+    position: relative;
+}
+
+.welcome-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--accent-light);
+    border: 1px solid rgba(200, 169, 126, 0.15);
+    padding: 60px 40px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(95, 116, 100, 0.03);
+    position: relative;
+}
+
+.flower-icon {
+    font-size: 1.8rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.flower-icon.bottom {
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+.welcome-title {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    color: var(--primary-dark);
+    letter-spacing: 0.15em;
+    margin-bottom: 30px;
+}
+
+.letter-content {
+    font-size: 1.05rem;
+    line-height: 2.2;
+    color: var(--text-main);
+    text-align: center;
+}
+
+.letter-content p {
+    margin-bottom: 20px;
+}
+
+.letter-content p:last-child {
+    margin-bottom: 0;
+}
+
+.letter-dear {
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 1.15rem;
+    margin-bottom: 25px !important;
+}
+
+@media (max-width: 600px) {
+    .welcome-card {
+        padding: 40px 20px;
+    }
+    .letter-content {
+        font-size: 0.95rem;
+        line-height: 2;
+    }
+}
+
+/* Q版人物奔跑擁抱動畫樣式 */
+.chibi-animation-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* 奔跑範圍加大 */
+    height: 180px; /* 稍微拉高適應男生變高 */
+    margin: 40px auto 10px;
+    overflow: visible; /* 允許頭部與氣球向上溢出顯示，防止遮頭 */
+    background: transparent;
+    border-bottom: 2px dashed rgba(200, 169, 126, 0.3); /* 地平線 */
+}
+
+/* 紅色腳踏車放置在起跑點 */
+.chibi-bicycle {
+    position: absolute;
+    bottom: -5px;
+    left: 40px; /* 留在男主角起點偏右側的位置 */
+    width: 90px;
+    height: 90px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.chibi-bicycle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.chibi-character {
+    position: absolute;
+    bottom: -5px;
+    transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+}
+
+.chibi-character img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* 去背的 PNG 不需要 mix-blend-mode */
+}
+
+/* 初始狀態與個別體型尺寸調整 */
+.chibi-groom {
+    width: 130px;  /* 男生更高 */
+    height: 130px;
+    left: 0;
+    transform: translateX(-120%) scaleX(-1); /* 水平翻轉以面向右邊 */
+    bottom: -5px;
+}
+
+.chibi-bride {
+    width: 100px;  /* 女生更瘦 (原本 120px) */
+    height: 100px;
+    right: 0;
+    transform: translateX(120%);
+    bottom: -5px;
+}
+
+/* 擁抱合影：初始隱藏並縮小，位於中央 */
+.chibi-hug {
+    left: 50%;
+    transform: translate(-50%, 0) scale(0.6);
+    opacity: 0;
+    width: 160px;
+    height: 160px;
+    bottom: -10px;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 奔跑與腳踏車顯示狀態 */
+.chibi-animation-container.running .chibi-bicycle,
+.chibi-animation-container.hugged .chibi-bicycle {
+    opacity: 0.95;
+}
+
+.chibi-animation-container.running .chibi-groom {
+    left: 50%;
+    transform: translateX(-110%) scaleX(-1); /* 保持水平翻轉 */
+    opacity: 1;
+}
+
+.chibi-animation-container.running .chibi-bride {
+    right: 50%;
+    transform: translateX(110%);
+    opacity: 1;
+}
+
+/* 奔跑時的上下顛簸晃動動畫 */
+.chibi-animation-container.running .chibi-img-wobble {
+    animation: chibiWobble 0.25s infinite alternate ease-in-out;
+}
+
+/* 相遇擁抱狀態 */
+.chibi-animation-container.hugged .chibi-groom {
+    left: 50%;
+    transform: translateX(-80%) scaleX(-1) scale(0.6); /* 保持水平翻轉 */
+    opacity: 0;
+}
+
+.chibi-animation-container.hugged .chibi-bride {
+    right: 50%;
+    transform: translateX(80%) scale(0.6);
+    opacity: 0;
+}
+
+.chibi-animation-container.hugged .chibi-hug {
+    transform: translate(-50%, -8px) scale(1.1);
+    opacity: 1;
+}
+
+/* 漂浮愛心效果 */
+.chibi-hearts-spawn {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.floating-heart {
+    position: absolute;
+    color: #e25c5c;
+    font-size: 1.2rem;
+    pointer-events: none;
+    animation: heartFly 1.5s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes chibiWobble {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes heartFly {
+    0% {
+        transform: translate(-50%, 120px) scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(calc(-50% + var(--dx)), 0px) scale(1.2) rotate(var(--rot));
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .chibi-animation-container {
+        max-width: 90%;
+        height: 150px;
+    }
+    .chibi-groom {
+        width: 100px;
+        height: 100px;
+    }
+    .chibi-bride {
+        width: 80px;
+        height: 80px;
+    }
+    .chibi-bicycle {
+        width: 70px;
+        height: 70px;
+        left: 20px;
+    }
+    .chibi-hug {
+        width: 130px;
+        height: 130px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chibi-animation-container {
+        height: 130px;
+    }
+    .chibi-groom {
+        width: 80px;
+        height: 80px;
+    }
+    .chibi-bride {
+        width: 65px;
+        height: 65px;
+    }
+    .chibi-bicycle {
+        width: 55px;
+        height: 55px;
+        left: 10px;
+    }
+    .chibi-hug {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+/* ==========================================================================
+   5. Our Story Section (我們的點點滴滴)
+   ========================================================================== */
+.story-section {
+    background-color: #ffffff;
+    position: relative;
+}
+
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 40px auto 0;
+    padding: 20px 0;
+}
+
+/* 時間軸中央主線 */
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    background-color: var(--primary-light);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: 0px;
+}
+
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 20px 40px;
+}
+
+/* 奇數項目（左側） */
+.timeline-item:nth-child(odd) {
+    left: 0;
+    text-align: right;
+}
+
+/* 偶數項目（右側） */
+.timeline-item:nth-child(even) {
+    left: 50%;
+    text-align: left;
+}
+
+/* 時間軸圓點 */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    right: -6px;
+    background-color: #ffffff;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    top: 30px;
+    z-index: 5;
+    transition: var(--transition-fast);
+}
+
+.timeline-item:nth-child(even)::after {
+    left: -6px;
+}
+
+.timeline-item:hover::after {
+    background-color: var(--primary);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(95, 116, 100, 0.4);
+}
+
+/* 圖片容器 */
+.timeline-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 260px; /* 增加高度以容納更多人物上半身，減少裁切 */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+}
+
+.timeline-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 22%; /* 預設焦距鎖定在上半身/面部區塊，防止遮臉 */
+    transition: transform 1s ease;
+}
+
+/* 美食點滴六宮格拼圖樣式 */
+.timeline-img-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-light);
+    transition: transform 1s ease;
+}
+
+.timeline-grid-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.timeline-grid-img:hover {
+    transform: scale(1.08);
+    z-index: 2;
+}
+
+.timeline-item:hover .timeline-img-grid {
+    transform: scale(1.03);
+}
+
+/* 時間軸照片裁切位置控制輔助類別 */
+.crop-top { object-position: center top !important; }
+.crop-15 { object-position: center 15% !important; }
+.crop-20 { object-position: center 20% !important; }
+.crop-25 { object-position: center 25% !important; }
+.crop-30 { object-position: center 30% !important; }
+.crop-35 { object-position: center 35% !important; }
+.crop-center { object-position: center center !important; }
+.crop-bottom { object-position: center bottom !important; }
+
+.timeline-item:hover .timeline-img {
+    transform: scale(1.05);
+}
+
+.timeline-content {
+    background: var(--bg-warm);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.02);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: var(--transition-fast);
+}
+
+.timeline-item:hover .timeline-content {
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(95, 116, 100, 0.06);
+    transform: translateY(-2px);
+}
+
+.timeline-date {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--accent-dark);
+    margin-bottom: 5px;
+}
+
+.timeline-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+}
+
+.timeline-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* 響應式時間軸（平板與手機） */
+@media (max-width: 768px) {
+    .timeline::after {
+        left: 20px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        padding-left: 45px;
+        padding-right: 0px;
+        text-align: left !important;
+    }
+    
+    .timeline-item:nth-child(odd) {
+        left: 0;
+    }
+    
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+    
+    .timeline-item::after {
+        left: 14px !important;
+    }
+    
+    .timeline-img-wrapper {
+        height: 160px;
+    }
+}
+
+/* ==========================================================================
+   6. Event Details Section (宴客資訊)
+   ========================================================================== */
+.event-section {
+    background-color: var(--primary-light);
+}
+
+.event-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.event-card {
+    flex: 1;
+    min-width: 320px;
+    background: #ffffff;
+    padding: 50px 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(95, 116, 100, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: var(--transition-smooth);
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(95, 116, 100, 0.1);
+}
+
+.event-card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    margin: 0 auto 25px;
+    transition: var(--transition-fast);
+}
+
+.event-card-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.event-card:hover .event-card-icon {
+    background: var(--primary);
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+.event-card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
+}
+
+.event-card-info {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.event-card-info.bold {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+/* 按鈕群組 */
+.calendar-btn-group, .map-btn-group {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.calendar-btn-group {
+    flex-direction: row;
+    justify-content: center;
+}
+
+@media (max-width: 480px) {
+    .calendar-btn-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* 交通資訊指引 */
+.transport-guide-container {
+    margin-top: 60px;
+    background: #ffffff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(95, 116, 100, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.transport-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 35px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    position: relative;
+}
+
+.transport-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    margin: 12px auto 0;
+}
+
+.transport-cards {
+    display: flex;
+    gap: 30px;
+}
+
+.transport-card {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    background: var(--bg-warm);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(95, 116, 100, 0.05);
+    transition: var(--transition-fast);
+}
+
+.transport-card:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(95, 116, 100, 0.04);
+    border-color: rgba(95, 116, 100, 0.15);
+}
+
+.transport-icon {
+    width: 45px;
+    height: 45px;
+    background: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    margin-right: 18px;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+
+.transport-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.transport-card:hover .transport-icon {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.transport-info {
+    flex: 1;
+}
+
+.transport-method {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+.transport-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.transport-desc b {
+    color: var(--text-main);
+}
+
+@media (max-width: 768px) {
+    .transport-cards {
+        flex-direction: column;
+    }
+    .transport-guide-container {
+        padding: 30px 20px;
+    }
+}
+
+/* ==========================================================================
+   7. Photo Gallery Section (婚紗畫廊 - 拍立得回憶牆)
+   ========================================================================== */
+.gallery-section {
+    background: #ffffff;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 10px;
+}
+
+.gallery-item {
+    position: relative;
+    background: #ffffff;
+    padding: 15px 15px 45px 15px; /* 拍立得底部的留白 */
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(95, 116, 100, 0.08);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    overflow: visible; /* 讓膠帶露在外面 */
+}
+
+/* 拍立得大圖特色照片 */
+.gallery-item.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    border-radius: 2px;
+    transition: transform 0.6s ease;
+}
+
+.gallery-item.large .gallery-img {
+    height: 520px;
+}
+
+/* 金色半透明紙膠帶裝飾 */
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 75px;
+    height: 22px;
+    background-color: rgba(200, 169, 126, 0.35); /* 半透明香檳金膠帶 */
+    backdrop-filter: blur(1px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    z-index: 5;
+    pointer-events: none;
+    transition: transform 0.4s ease;
+}
+
+/* 隨機角度 */
+.gallery-item:nth-child(3n+1) {
+    transform: rotate(-1.5deg);
+}
+.gallery-item:nth-child(3n+2) {
+    transform: rotate(2deg);
+}
+.gallery-item:nth-child(3n) {
+    transform: rotate(-2.5deg);
+}
+
+/* Hover 效果：卡片回正、上升、放大、金色發光與陰影加深 */
+.gallery-item:hover {
+    transform: translateY(-10px) rotate(0deg) scale(1.03);
+    box-shadow: 0 15px 35px rgba(200, 169, 126, 0.2);
+    z-index: 10;
+}
+
+.gallery-item:hover::before {
+    transform: translateX(-50%) rotate(0deg) translateY(-2px) scale(1.05);
+}
+
+.gallery-hover-overlay {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 45px;
+    background: rgba(95, 116, 100, 0.3);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+}
+
+.gallery-hover-overlay span {
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 8px 20px;
+    border: 1px solid #ffffff;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-hover-overlay {
+    opacity: 1;
+}
+
+.gallery-item:hover .gallery-hover-overlay span {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    .gallery-item.large {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+    .gallery-item.large .gallery-img {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 10px 15px;
+    }
+    .gallery-item.large {
+        grid-column: span 1;
+    }
+    .gallery-item.large .gallery-img {
+        height: 220px;
+    }
+}
+
+/* ==========================================================================
+   8. Custom Lightbox Modal
+   ========================================================================== */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(43, 53, 48, 0.95);
+    backdrop-filter: blur(8px);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: 300;
+    transition: var(--transition-fast);
+    cursor: pointer;
+}
+
+.lightbox-close:hover {
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+.lightbox-content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 60px 40px;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    animation: zoom 0.4s ease-out;
+}
+
+@keyframes zoom {
+    from {transform: scale(0.9); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+
+/* 導覽按鈕 */
+.lightbox-prev, .lightbox-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    transition: var(--transition-fast);
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.lightbox-next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.lightbox-prev {
+    left: 0;
+}
+
+.lightbox-prev:hover, .lightbox-next:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--accent);
+}
+
+@media (max-width: 480px) {
+    .lightbox-prev, .lightbox-next {
+        padding: 10px;
+        font-size: 18px;
+    }
+}
+
+/* ==========================================================================
+   9. RSVP Section (席位回覆表單)
+   ========================================================================== */
+.rsvp-section {
+    background-color: var(--bg-warm);
+}
+
+.rsvp-form-card {
+    background: #ffffff;
+    max-width: 650px;
+    margin: 0 auto;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(95, 116, 100, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 進度條 */
+.rsvp-progress-container {
+    margin-bottom: 35px;
+}
+
+.rsvp-progress-bar {
+    height: 4px;
+    background: var(--primary-light);
+    border-radius: 2px;
+    position: relative;
+    width: 100%;
+}
+
+.rsvp-progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--primary);
+    width: 16.66%; /* JS 動態更新，預設為 1/6 */
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+
+.rsvp-progress-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    text-align: right;
+    font-weight: 600;
+}
+
+/* 表單步驟控制 */
+.form-step {
+    display: none;
+    animation: slideStep 0.4s ease-out forwards;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes slideStep {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.step-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 25px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.step-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.step-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
+/* 表單欄位 */
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #c95d5d;
+    margin-left: 3px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group textarea {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1px solid rgba(95, 116, 100, 0.25);
+    border-radius: 12px;
+    background-color: var(--bg-warm);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(95, 116, 100, 0.08);
+}
+
+/* 錯誤提示 */
+.error-msg {
+    display: none;
+    color: #c95d5d;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    padding-left: 4px;
+}
+
+.form-group.has-error input {
+    border-color: #c95d5d;
+    box-shadow: 0 0 0 4px rgba(201, 93, 93, 0.08);
+}
+
+.form-group.has-error .error-msg {
+    display: block;
+}
+
+/* 客製化選項卡片 (出席 & 交通) */
+.option-card-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option-card {
+    display: block;
+    cursor: pointer;
+    position: relative;
+}
+
+.option-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.option-card-content {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid rgba(95, 116, 100, 0.15);
+    border-radius: 16px;
+    background: #ffffff;
+    transition: var(--transition-fast);
+}
+
+.option-card:hover .option-card-content {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(95, 116, 100, 0.04);
+}
+
+/* 被選取狀態 */
+.option-card input[type="radio"]:checked + .option-card-content {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 6px 15px rgba(95, 116, 100, 0.08);
+}
+
+.option-icon {
+    font-size: 1.8rem;
+    margin-right: 18px;
+    transition: var(--transition-fast);
+}
+
+.option-card:hover .option-icon {
+    transform: scale(1.15);
+}
+
+.option-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 2px;
+}
+
+.option-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* 親友選擇藥丸群組 (Pill Group) */
+.radio-pill-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.radio-pill {
+    flex: 1;
+    min-width: 120px;
+    position: relative;
+    cursor: pointer;
+}
+
+.radio-pill input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radio-pill span {
+    display: block;
+    text-align: center;
+    padding: 10px 15px;
+    border: 1px solid rgba(95, 116, 100, 0.15);
+    border-radius: 30px;
+    background: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: var(--transition-fast);
+}
+
+.radio-pill:hover span {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.radio-pill input[type="radio"]:checked + span {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(95, 116, 100, 0.15);
+}
+
+/* 數字增減器 (Counter) */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.count-selectors-row {
+    display: flex;
+    gap: 20px;
+}
+
+.count-selectors-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.number-counter {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-warm);
+    border: 1px solid rgba(95, 116, 100, 0.15);
+    border-radius: 30px;
+    overflow: hidden;
+    padding: 2px;
+}
+
+.counter-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #ffffff;
+    color: var(--primary);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.counter-btn:hover {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.number-counter input {
+    width: 45px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.number-counter input:focus {
+    outline: none;
+}
+
+.number-counter.sm {
+    border-radius: 8px;
+}
+
+.number-counter.sm .counter-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+}
+
+.number-counter.sm input {
+    width: 35px;
+    font-size: 1rem;
+}
+
+.diet-inputs {
+    background: var(--bg-warm);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(95, 116, 100, 0.1);
+}
+
+.diet-inputs .form-row {
+    margin-bottom: 10px;
+}
+.diet-inputs .form-row:last-child {
+    margin-bottom: 0;
+}
+
+.diet-inputs span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* 導覽按鈕群組 */
+.form-nav-btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 35px;
+    gap: 15px;
+}
+
+.form-nav-btn-group button {
+    flex: 1;
+}
+
+/* 送出成功畫面 */
+.rsvp-success-screen {
+    text-align: center;
+    padding: 20px 0;
+    animation: zoom 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.success-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.success-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+}
+
+.success-message {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.success-message span {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.success-details {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+/* 確認摘要盒 */
+.confirmed-summary-box {
+    background: var(--primary-light);
+    border: 1px solid rgba(95, 116, 100, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 35px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.confirmed-summary-box h4 {
+    font-size: 0.95rem;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(95, 116, 100, 0.15);
+    padding-bottom: 6px;
+}
+
+.confirmed-summary-box ul {
+    list-style-type: none;
+}
+
+.confirmed-summary-box li {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirmed-summary-box li:last-child {
+    margin-bottom: 0;
+}
+
+.confirmed-summary-box li span:first-child {
+    color: var(--text-muted);
+}
+
+.confirmed-summary-box li span:last-child {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+@media (max-width: 480px) {
+    .rsvp-form-card {
+        padding: 24px 15px;
+    }
+    .count-selectors-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* ==========================================================================
+   10. Footer Section
+   ========================================================================== */
+.wedding-footer {
+    background-color: var(--primary-dark);
+    color: #ffffff;
+    padding: 60px 0;
+}
+
+.footer-names {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+}
+
+.footer-thankyou {
+    font-family: var(--font-cursive);
+    font-size: 2.2rem;
+    color: var(--accent);
+    margin-bottom: 30px;
+}
+
+.footer-copyright {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+}
+
+/* 櫻花飄落特效畫布 */
+#sakura-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 穿透點擊 */
+    z-index: 9998; /* 低於音樂控制點，但高於大部分內容 */
+}
+
+/* 主網頁模糊轉場包裝器 */
+.main-content-blur {
+    filter: blur(15px);
+    transition: filter 2.2s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+.main-content-clear {
+    filter: blur(0px);
+}
+
+/* ==========================================================================
+   開場前導頁 & 3D 信封樣式 (Splash Screen & 3D Envelope)
+   ========================================================================== */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #faf9f6; /* 象牙白 */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: top center;
+    transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1), 
+                opacity 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+    overflow: hidden;
+}
+
+/* 3D 翻頁滑出特效 */
+.splash-screen.page-turn {
+    transform: translateY(-100%) rotateX(10deg);
+    opacity: 0.1;
+}
+
+/* 3D 信封容器 */
+.envelope-container {
+    perspective: 1200px;
+    width: 90%;
+    max-width: 480px;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.3, 1); /* 平滑縮放轉場 */
+}
+
+/* 信封整體放大聚焦效果 */
+.envelope-container.zoomed {
+    transform: scale(1.18); /* 整體放大 18% */
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 350px; /* 拉高信封以增加卡片的垂直空間 */
+    background-color: #b32424; /* 質感酒紅色 (信封底面色) */
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(179, 36, 36, 0.15);
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 1.2s ease,
+                box-shadow 1.2s ease;
+    clip-path: inset(-1000px -1000px 0px -1000px); /* 僅向上無限延伸裁切，完美隱藏口袋底部溢出的卡片邊緣 */
+}
+
+/* 當卡片彈出時，信封背板背景變為透明，移除陰影與裁切 */
+.envelope.card-popup {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    clip-path: none !important;
+}
+
+/* 信封上蓋 (Flap) */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55%; /* 調高為 55% 確保蓋好蓋滿，完全遮住卡片 */
+    background-color: #c42f2f; /* 硃紅色上蓋 */
+    border-radius: 12px 12px 240px 240px; /* 大圓角設計，形成圆润舌状翻蓋 */
+    transform-origin: top center;
+    z-index: 4;
+    transition: transform 1.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                opacity 1.2s ease,
+                z-index 0.3s 0.6s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+/* 信封上蓋打開後的旋轉 */
+.envelope.flap-open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1; /* 打開後層級低於卡片，以防遮住彈出的卡片 */
+    background-color: #941e1e; /* 打開後背部陰影暗紅色 */
+}
+
+/* 當卡片彈出時，上蓋向上縮小淡出 */
+.envelope.card-popup .envelope-flap {
+    transform: rotateX(180deg) scale(0.6) translateY(-50px);
+    opacity: 0;
+}
+
+/* 信封前片 (封口遮罩，左右下三角) */
+.envelope-front {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 62%;
+    background-color: #a32121; /* 層疊前片偏暗紅色 */
+    clip-path: polygon(0 100%, 0 0, 50% 25%, 100% 0, 100% 100%); /* 切口深度調為 25%，與上蓋完美閉合不露餡 */
+    z-index: 3;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+    transform: translateZ(10px); /* 在 3D 空間中立體突出在卡片前方 */
+    transform-style: preserve-3d;
+    transition: transform 1.3s cubic-bezier(0.25, 1, 0.3, 1), 
+                opacity 1.2s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+/* 當卡片彈出時，信封前袋向下縮小淡出 */
+.envelope.card-popup .envelope-front {
+    transform: translateZ(10px) scale(0.68) translateY(60px);
+    opacity: 0;
+}
+
+/* 喜帖金色書法燙金文字標籤 */
+.envelope-label {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #e6ca65; /* 質感燙金色 */
+    font-family: 'Ma Shan Zheng', cursive, var(--font-serif); /* 書法字體 (行書體) */
+    font-size: 2.3rem; 
+    font-weight: normal;
+    letter-spacing: 0.25em;
+    text-indent: 0.25em; /* 抵消 letter-spacing */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 12px rgba(230, 202, 101, 0.4);
+    z-index: 10;
+    pointer-events: none;
+    text-align: center;
+    border: 1.5px solid rgba(230, 202, 101, 0.6); /* 金邊外框 */
+    padding: 2px 16px 2px 20px;
+    border-radius: 4px;
+    background: rgba(148, 30, 30, 0.65); /* 暗紅色微透背景 */
+    backdrop-filter: blur(2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.5s ease;
+}
+
+/* 當卡片彈出時，信封上的「喜帖」字樣淡出以露出卡片 */
+.envelope.card-popup .envelope-label {
+    opacity: 0;
+}
+
+/* 信封內的邀請卡片 */
+.envelope-card {
+    position: absolute;
+    bottom: 10px;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    background-color: var(--bg-warm);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    z-index: 2;
+    opacity: 1; /* 保持 1 顯示，讓它在拉出信封時有明顯的「邊緣抽拉」立體效果 */
+    transform: translateY(62px) translateZ(2px) scale(0.76) rotateX(12deg); /* 初始再縮小至 76% 隱藏於口袋內，配合比例下調 Y 位移至 62px 保持頂部微露，增加 Z 軸深度差 */
+    transition: transform 1.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1.2s ease-out; /* 飛出回彈特效 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: visible; /* 改為 visible，允許 Q 版人物跑動與氣球溢出卡片上方，不再遮頭 */
+    border: 1px solid rgba(200, 169, 126, 0.15);
+}
+
+/* 卡片抽出彈出狀態 */
+.envelope.card-popup .envelope-card {
+    transform: translateY(-56%) translateZ(65px) scale(1.28) rotateX(0deg); /* 飛出並顯著放大，在 Z 軸上向螢幕迎面躍出 */
+    z-index: 5; /* 彈出時提升層級，在信封淡出過渡時完美覆蓋其餘部分 */
+    box-shadow: 0 25px 50px rgba(95, 116, 100, 0.22);
+}
+
+/* 前導頁中英標題 */
+.splash-header {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.splash-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+}
+
+.splash-amp {
+    font-family: var(--font-cursive);
+    font-size: 2.6rem;
+    color: var(--accent);
+}
+
+.splash-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.splash-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin: 10px auto 0;
+}
+
+.splash-footer {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.splash-loading-text {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    animation: pulseText 1.5s infinite ease-in-out;
+}
+
+/* 金色發光閃爍過渡遮罩 */
+.flash-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(200, 169, 126, 0.5) 50%, rgba(95, 116, 100, 0.8) 100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 10000;
+}
+
+.flash-overlay.active {
+    opacity: 1;
+}
+
+/* 致詞卡片靜態貼圖 */
+.chibi-static-container {
+    width: 100%;
+    max-width: 180px;
+    margin: 30px auto 10px;
+    text-align: center;
+    border-bottom: 2px dashed rgba(200, 169, 126, 0.3); /* 地平線 */
+    padding-bottom: 5px;
+}
+
+.chibi-static-hug {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: var(--transition-fast);
+}
+
+.chibi-static-container:hover .chibi-static-hug {
+    transform: scale(1.08) rotate(2deg);
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+    .envelope-container {
+        height: 320px;
+    }
+    .envelope-container.zoomed {
+        transform: scale(1.03); /* 手機版輕微縮放，防止橫向溢出 */
+    }
+    .envelope {
+        height: 300px; /* 手機版同步拉高，防遮頭 */
+    }
+    .envelope.card-popup .envelope-card {
+        transform: translateY(-50%) scale(1.12); /* 手機版卡片彈出縮放調整，防遮擋 */
+    }
+    .envelope-label {
+        font-size: 1.8rem;
+        bottom: 18px;
+        padding: 4px 10px 4px 14px;
+        border-width: 1px;
+    }
+    .splash-title {
+        font-size: 1.8rem;
+    }
+    .splash-amp {
+        font-size: 2.2rem;
+    }
+}

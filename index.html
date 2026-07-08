@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>祥宇&麗紘 喜帖</title>
+    
+    <!-- Google Fonts for Elegant Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Noto+Serif+TC:wght@300;400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    
+    <!-- Import 芫荽 (Iansui) Font from JSDelivr CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chinese-fonts/iansui/dist/Iansui/result.css">
+
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <!-- Sakura Canvas Animation (櫻花飄落特效畫布) -->
+    <canvas id="sakura-canvas"></canvas>
+
+    <!-- Splash Screen Overlay (開場前導頁 & 朦朧信封) -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="envelope-container">
+            <!-- 3D 信封本體 -->
+            <div class="envelope" id="envelope-box">
+                <!-- 信封上蓋 (Flap) -->
+                <div class="envelope-flap"></div>
+                
+                <!-- 信封內卡 (包含Q版動畫與文字) -->
+                <div class="envelope-card">
+                    <div class="splash-header">
+                        <h2 class="splash-title">祥宇 <span class="splash-amp">&</span> 麗紘</h2>
+                        <p class="splash-subtitle">Wedding Invitation</p>
+                        <div class="splash-divider"></div>
+                    </div>
+                    
+                    <!-- Chibi Animation Container inside Splash -->
+                    <div class="chibi-animation-container" id="chibi-anim-box-splash">
+                        <!-- Red Bicycle left at the starting point -->
+                        <div class="chibi-bicycle" id="chibi-bike-splash">
+                            <img src="images/red_bicycle.png" alt="紅色腳踏車">
+                        </div>
+                        <div class="chibi-character chibi-groom">
+                            <img src="images/chibi_groom.png" alt="Q版祥宇" class="chibi-img-wobble">
+                        </div>
+                        <div class="chibi-character chibi-bride">
+                            <img src="images/chibi_bride.png" alt="Q版麗紘" class="chibi-img-wobble">
+                        </div>
+                        <div class="chibi-character chibi-hug">
+                            <img src="images/chibi_hug.png" alt="Q版擁抱">
+                        </div>
+                        <div class="chibi-hearts-spawn" id="chibi-hearts-splash"></div>
+                    </div>
+                    
+                    <div class="splash-footer">
+                        <p class="splash-loading-text">正在為您開啟信封...</p>
+                    </div>
+                </div>
+                
+                <!-- 信封前片 (封口遮罩) -->
+                <div class="envelope-front">
+                    <div class="envelope-label">喜帖</div>
+                </div>
+            </div>
+        </div>
+        <!-- Transition flash overlay -->
+        <div class="flash-overlay" id="flash-overlay"></div>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bgm" loop preload="auto">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Gymnopedie_No._1_%28ISRC_USUAN1100787%29.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Audio Control -->
+    <div id="music-control" class="music-control" aria-label="播放/暫停背景音樂">
+        <div class="music-disc">
+            <svg class="music-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+        </div>
+        <!-- Visualizer dancing bars -->
+        <div class="visualizer">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Navigation / Progress Dots (側邊導航圓點) -->
+    <nav class="side-nav">
+        <a href="#hero" class="nav-dot active" title="首頁"></a>
+        <a href="#event" class="nav-dot" title="婚禮資訊"></a>
+        <a href="#welcome" class="nav-dot" title="歡迎致詞"></a>
+        <a href="#story" class="nav-dot" title="我們的故事"></a>
+        <a href="#gallery" class="nav-dot" title="婚紗畫廊"></a>
+        <a href="#rsvp" class="nav-dot" title="出席回覆"></a>
+    </nav>
+
+    <!-- Main Content Wrapper (主網頁內容 - 支援模糊轉場效果) -->
+    <div id="main-content" class="main-content-blur">
+        
+        <!-- 1. Hero Section (封面區塊) -->
+        <header id="hero" class="hero-section">
+            <div class="hero-bg-overlay"></div>
+            <div class="hero-content container">
+                <span class="hero-subtitle scroll-reveal">Save the Date</span>
+                <h1 class="hero-title scroll-reveal">祥宇 <span class="ampersand">&</span> 麗紘</h1>
+                <div class="wedding-photo-frame scroll-reveal">
+                    <img src="images/wedding02-02.jpg" alt="祥宇與麗紘的婚紗照" class="hero-wedding-img">
+                    <div class="frame-border"></div>
+                </div>
+                
+                <p class="hero-message scroll-reveal">── 我們結婚了 ──</p>
+                <p class="hero-date scroll-reveal">2026.09.27 | 星期日</p>
+                
+                <!-- Countdown Timer -->
+                <div id="countdown" class="countdown-container scroll-reveal" data-date="2026-09-27T12:00:00">
+                    <div class="countdown-item">
+                        <span id="days" class="time-num">00</span>
+                        <span class="time-label">DAYS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span id="hours" class="time-num">00</span>
+                        <span class="time-label">HOURS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span id="minutes" class="time-num">00</span>
+                        <span class="time-label">MINS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span id="seconds" class="time-num">00</span>
+                        <span class="time-label">SECS</span>
+                    </div>
+                </div>
+
+                <a href="#rsvp" class="btn primary-btn scroll-reveal">填寫出席表單</a>
+                
+                <div class="scroll-down-arrow">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. Event Details Section (宴客資訊) -->
+        <section id="event" class="event-section section-padding">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="section-subtitle">Wedding Details</span>
+                    <h2 class="section-title">婚宴資訊</h2>
+                    <div class="header-divider"></div>
+                </div>
+
+                <div class="event-cards-container">
+                    <!-- Time Card -->
+                    <div class="event-card scroll-reveal">
+                        <div class="event-card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <h3 class="event-card-title">婚禮日期</h3>
+                        <p class="event-card-info bold">2026 年 9 月 27 日 (星期日)</p>
+                        <p class="event-card-info">中午 12:00 入席</p>
+                        
+                        <!-- Add to Calendar Buttons -->
+                        <div class="calendar-btn-group">
+                            <a href="#" id="btn-gcal" class="btn outline-btn btn-sm">加入 Google 行事曆</a>
+                            <a href="#" id="btn-ical" class="btn outline-btn btn-sm">加入 Apple 行事曆</a>
+                        </div>
+                    </div>
+
+                    <!-- Location Card -->
+                    <div class="event-card scroll-reveal">
+                        <div class="event-card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h3 class="event-card-title">婚宴地點</h3>
+                        <p class="event-card-info bold">林邊永鑫海鮮餐廳</p>
+                        <p class="event-card-info">屏東縣林邊鄉中山路 379 號</p>
+                        
+                        <div class="map-btn-group">
+                            <a href="https://maps.google.com/?q=林邊永鑫海鮮餐廳+屏東縣林邊鄉中山路379號" target="_blank" class="btn outline-btn btn-sm btn-gold">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+                                    <line x1="9" y1="3" x2="9" y2="18"></line>
+                                    <line x1="15" y1="6" x2="15" y2="21"></line>
+                                </svg>
+                                開啟 Google 地圖導航
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transportation Guidelines (交通指引) -->
+                <div class="transport-guide-container scroll-reveal">
+                    <h3 class="transport-title">交通資訊建議</h3>
+                    <div class="transport-cards">
+                        <!-- Train Card -->
+                        <div class="transport-card">
+                            <div class="transport-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+                                    <line x1="4" y1="11" x2="20" y2="11"></line>
+                                    <line x1="8" y1="15" x2="8" y2="19"></line>
+                                    <line x1="16" y1="15" x2="16" y2="19"></line>
+                                    <circle cx="8" cy="7" r="1"></circle>
+                                    <circle cx="16" cy="7" r="1"></circle>
+                                </svg>
+                            </div>
+                            <div class="transport-info">
+                                <h4 class="transport-method">火車慢活行</h4>
+                                <p class="transport-desc">搭乘火車至「<b>林邊火車站</b>」下車。出站後，先找找顯眼的 <b>親子飛天火車</b> 公園地標並左轉，接著沿仁愛路、仁和路（一路直線到底不用轉彎唷！）步行約 10 分鐘（約 800m）即可抵達會場。</p>
+                            </div>
+                        </div>
+                        <!-- Car Card -->
+                        <div class="transport-card">
+                            <div class="transport-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 001 14v2c0 .6.4 1 1 1h2"></path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                            </div>
+                            <div class="transport-info">
+                                <h4 class="transport-method">開車輕鬆停</h4>
+                                <p class="transport-desc">走國道三號高速公路南下，下 <b>林邊交流道</b> 後左轉進入林邊市區。直行約 1.2 公里後，目的地就在您的 <b>右手邊</b>（餐廳對面是 7-Eleven，右轉後會引導您進入永鑫停車場）。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Invitation Letter Section (歡迎致辭) -->
+        <section id="welcome" class="welcome-section section-padding">
+            <div class="container text-center">
+                <div class="welcome-card scroll-reveal">
+                    <div class="flower-icon">🌸</div>
+                    <h2 class="welcome-title">💖 我們結婚了 💖</h2>
+                    <div class="letter-content">
+                        <p class="letter-dear">親愛的親朋好友們：</p>
+                        <p>在這充滿幸福的日子裡，我們要結婚了💍 誠摯邀請您與我們一同分享喜悅，見證我們邁向人生的下一個階段。</p>
+                        <p>您的祝福對我們來說意義非凡。為求宴席安排盡善盡美，再麻煩您撥空協助填寫出席表單，方便我們統計人數與規劃座位。由衷感謝您的祝福與配合！✨</p>
+                    </div>
+                    
+                    <!-- Static Chibi Sticker in Welcome Card -->
+                    <div class="chibi-static-container scroll-reveal">
+                        <img src="images/chibi_hug.png" alt="Q版甜蜜擁抱" class="chibi-static-hug">
+                    </div>
+
+                    <div class="flower-icon bottom">🌸</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Our Story Section (我們的點點滴滴) -->
+        <section id="story" class="story-section section-padding">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="section-subtitle">Our Story</span>
+                    <h2 class="section-title">我們的相處點滴</h2>
+                    <div class="header-divider"></div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    <!-- Timeline Item 1 (2022.12.12 - mem01) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem01.jpg" alt="相處點滴 1" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2022.12.12</div>
+                            <h3 class="timeline-title">故事的序章</h3>
+                            <p class="timeline-desc">在愛上你以前，不吃鴨的我與缺乏社交能量的你， 因為一場薑母鴨聚餐而有了交集。那是一段跨越兩校之間的距離，屬於我們故事的序章。</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 2 (2023.01.06 - mem02) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem02.jpg" alt="相處點滴 2" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.01.06</div>
+                            <h3 class="timeline-title">吃燒烤、去爬山</h3>
+                            <p class="timeline-desc">接著我們去吃燒烤、去爬山</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 3 (2023.05.01 - mem03) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem03.jpg" alt="相處點滴 3" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.05.01</div>
+                            <h3 class="timeline-title">陪著姊姊們慶生</h3>
+                            <p class="timeline-desc">陪著姊姊們慶生，四處去玩</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 4 (2023.06.01 - mem04) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem04.jpg" alt="相處點滴 4" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.06.01</div>
+                            <h3 class="timeline-title">專屬生日派對</h3>
+                            <p class="timeline-desc">愛上你的那一年，在姊姊們與媒人的熱心引薦下，我為你籌辦一場生日派對。</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 5 (2023.07.01 - mem05) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem05.jpg" alt="相處點滴 5" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.07.01</div>
+                            <h3 class="timeline-title">我們在一起了</h3>
+                            <p class="timeline-desc">這一天，我們在一起了</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 6 (2023.07.18 - mem07) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem07.jpg" alt="相處點滴 6" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.07.18</div>
+                            <h3 class="timeline-title">第一場電影</h3>
+                            <p class="timeline-desc">甚至第一次看電影的票都是姊姊們送的XD</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 7 (2023.11.10 - mem06) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem06.jpg" alt="相處點滴 7" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.11.10</div>
+                            <h3 class="timeline-title">取得碩士學位</h3>
+                            <p class="timeline-desc">後來你陪我寫論文拿到碩士學位</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 8 (2025.01.11 - mem08) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem08.jpg" alt="相處點滴 8" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2025.01.11</div>
+                            <h3 class="timeline-title">融入彼此的生活</h3>
+                            <p class="timeline-desc">最後我們一步一步認識了彼此的朋友、家人，正式進入彼此的生活。</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 9 (2023~2026 - eat01~eat06) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <!-- 吃吃喝喝美食六宮格拼圖 -->
+                            <div class="timeline-img-grid">
+                                <img src="images/eat01.jpg" alt="美食點滴 1" class="timeline-grid-img">
+                                <img src="images/eat02.jpg" alt="美食點滴 2" class="timeline-grid-img">
+                                <img src="images/eat03.jpg" alt="美食點滴 3" class="timeline-grid-img">
+                                <img src="images/eat04.jpg" alt="美食點滴 4" class="timeline-grid-img">
+                                <img src="images/eat05.jpg" alt="美食點滴 5" class="timeline-grid-img">
+                                <img src="images/eat06.jpg" alt="美食點滴 6" class="timeline-grid-img">
+                            </div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023 ~ 2026</div>
+                            <h3 class="timeline-title">躺平吃吃喝喝</h3>
+                            <p class="timeline-desc">這些年我從原本的工作狂開始學著躺平，陪著你四處走走吃吃喝喝</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 10 (2026 - mem09) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem09.jpg" alt="相處點滴 9" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2026</div>
+                            <h3 class="timeline-title">達成 1000 天紀念</h3>
+                            <p class="timeline-desc">甚至ai騙了我兩次不過還是達成1000天的紀念</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 11 (2026 - mem10) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/mem10.jpg" alt="相處點滴 10" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2026</div>
+                            <h3 class="timeline-title">用一輩子的運氣遇見你</h3>
+                            <p class="timeline-desc">我總說：我用了一輩子的運氣來遇見了你。遇見一個貼心、溫柔，且願意包容我火爆脾氣的你。是提醒我要放輕鬆、要休息，無條件接住我的情緒、呵護著我的你。</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 12 (2023.10.14 - wed01) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/wed01.jpg" alt="相處點滴 11" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.10.14</div>
+                            <h3 class="timeline-title">麗雯妹妹的婚禮</h3>
+                            <p class="timeline-desc">經過麗雯妹妹的婚禮</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 13 (2023.12.30 - wed02) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/wed02.jpg" alt="相處點滴 12" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023.12.30</div>
+                            <h3 class="timeline-title">夥伴雅婷的婚禮</h3>
+                            <p class="timeline-desc">經過夥伴雅婷的婚禮</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 14 (2024.12.15 - wed03) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/wed03.jpg" alt="相處點滴 13" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2024.12.15</div>
+                            <h3 class="timeline-title">兄弟秉旻的婚禮</h3>
+                            <p class="timeline-desc">經過兄弟秉旻的婚禮</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 15 (2025.03.02 - wed04) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/wed04.jpg" alt="相處點滴 14" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2025.03.02</div>
+                            <h3 class="timeline-title">媒人幸蓉的婚禮</h3>
+                            <p class="timeline-desc">經過媒人幸蓉的婚禮</p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 16 (2026.09.27 - wedding01-05) -->
+                    <div class="timeline-item scroll-reveal">
+                        <div class="timeline-img-wrapper">
+                            <img src="images/wedding01-05.jpg" alt="相處點滴 15" class="timeline-img">
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2026.09.27</div>
+                            <h3 class="timeline-title">邁向新旅程</h3>
+                            <p class="timeline-desc">接下來我們將在這一天邁向新旅程，在所有至親好友的見證下，交換誓言。邀請大家一同來參與，見證我們生命中最重要的幸福起點。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Photo Gallery Section (婚紗畫廊) -->
+        <section id="gallery" class="gallery-section section-padding">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="section-subtitle">Gallery</span>
+                    <h2 class="section-title">婚紗相簿</h2>
+                    <div class="header-divider"></div>
+                </div>
+
+                <!-- Gallery Grid (拍立得風格回憶牆) -->
+                <div class="gallery-grid">
+                    <!-- Large Image (Main Cover) -->
+                    <div class="gallery-item large scroll-reveal">
+                        <img src="images/wedding01-01.jpg" alt="婚紗相簿 1" class="gallery-img" data-index="0">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 2 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding01-02.jpg" alt="婚紗相簿 2" class="gallery-img" data-index="1">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 3 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding01-03.jpg" alt="婚紗相簿 3" class="gallery-img" data-index="2">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 4 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding01-04.jpg" alt="婚紗相簿 4" class="gallery-img" data-index="3">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 5 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding01-05.jpg" alt="婚紗相簿 5" class="gallery-img" data-index="4">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 6 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding01-06.jpg" alt="婚紗相簿 6" class="gallery-img" data-index="5">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 7 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding01-07.jpg" alt="婚紗相簿 7" class="gallery-img" data-index="6">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 8 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding02-01.jpg" alt="婚紗相簿 8" class="gallery-img" data-index="7">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 9 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding02-02.jpg" alt="婚紗相簿 9" class="gallery-img" data-index="8">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 10 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding02-03.jpg" alt="婚紗相簿 10" class="gallery-img" data-index="9">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 11 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding03-01.jpg" alt="婚紗相簿 11" class="gallery-img" data-index="10">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 12 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding03-02.jpg" alt="婚紗相簿 12" class="gallery-img" data-index="11">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 13 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding03-03.jpg" alt="婚紗相簿 13" class="gallery-img" data-index="12">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 14 -->
+                    <div class="gallery-item scroll-reveal">
+                        <img src="images/wedding03-04.jpg" alt="婚紗相簿 14" class="gallery-img" data-index="13">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                    <!-- Large Image (Main Footer) -->
+                    <div class="gallery-item large scroll-reveal">
+                        <img src="images/wedding04-01.jpg" alt="婚紗相簿 15" class="gallery-img" data-index="14">
+                        <div class="gallery-hover-overlay">
+                            <span>放大瀏覽</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Lightbox Modal -->
+        <div id="lightbox" class="lightbox-modal">
+            <span class="lightbox-close">&times;</span>
+            <div class="lightbox-content-container">
+                <img class="lightbox-content" id="lightbox-img" alt="放大圖">
+            </div>
+            <a class="lightbox-prev">&#10094;</a>
+            <a class="lightbox-next">&#10095;</a>
+        </div>
+
+        <!-- 6. RSVP Section (出席調查表) -->
+        <section id="rsvp" class="rsvp-section section-padding">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="section-subtitle">RSVP</span>
+                    <h2 class="section-title">席位預留調查</h2>
+                    <div class="header-divider"></div>
+                    <p class="section-desc">為了我們能更完美地款待各位，請協助新人在 <b>2026年8月31日</b> 前填寫此表單喔！</p>
+                </div>
+
+                <!-- Multi-step Form Card -->
+                <div class="rsvp-form-card scroll-reveal">
+                    <!-- Progress bar -->
+                    <div class="rsvp-progress-container">
+                        <div class="rsvp-progress-bar" id="rsvp-progress"></div>
+                        <div class="rsvp-progress-text">第 <span id="current-step-num">1</span> / 6 個區段</div>
+                    </div>
+
+                    <form id="wedding-rsvp-form">
+                        
+                        <!-- STEP 1: Basic Information -->
+                        <div class="form-step active" data-step="1">
+                            <h3 class="step-title">基本資料</h3>
+                            <div class="form-group">
+                                <label for="guest-name">您的姓名 <span class="required">*</span></label>
+                                <input type="text" id="guest-name" name="name" placeholder="請輸入您的真實姓名" required>
+                                <span class="error-msg">請填寫此欄位</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="guest-phone">聯絡電話 <span class="required">*</span></label>
+                                <input type="tel" id="guest-phone" name="phone" placeholder="例如：0912345678" required>
+                                <span class="error-msg">請填寫正確的手機格式</span>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: Attendance -->
+                        <div class="form-step" data-step="2">
+                            <h3 class="step-title">出席意願 <span class="required">*</span></h3>
+                            <p class="step-subtitle">請問您是否出席婚宴？</p>
+                            
+                            <div class="option-card-group">
+                                <label class="option-card">
+                                    <input type="radio" name="attendance" value="attend" required checked>
+                                    <div class="option-card-content">
+                                        <div class="option-icon">🎉</div>
+                                        <div class="option-title">同樂！我會準時出席</div>
+                                        <div class="option-desc">期待與你們共享這喜悅的日子！</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="option-card">
+                                    <input type="radio" name="attendance" value="gift">
+                                    <div class="option-card-content">
+                                        <div class="option-icon">✉️</div>
+                                        <div class="option-title">禮到！人無法到場</div>
+                                        <div class="option-desc">心意不缺席，會提前寄送祝福。</div>
+                                    </div>
+                                </label>
+
+                                <label class="option-card">
+                                    <input type="radio" name="attendance" value="decline">
+                                    <div class="option-card-content">
+                                        <div class="option-icon">❤️</div>
+                                        <div class="option-title">不克出席，寄予深深祝福</div>
+                                        <div class="option-desc">很遺憾無法前往，祝你們幸福美滿！</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: Relationship & Guest Count (Conditional) -->
+                        <div class="form-step" data-step="3" id="step-relationship">
+                            <h3 class="step-title">親友關係與人數</h3>
+                            
+                            <div class="form-group">
+                                <label>您是哪一方的親友？ <span class="required">*</span></label>
+                                <div class="radio-pill-group">
+                                    <label class="radio-pill">
+                                        <input type="radio" name="relation" value="groom" checked>
+                                        <span>男方親友 (祥宇)</span>
+                                    </label>
+                                    <label class="radio-pill">
+                                        <input type="radio" name="relation" value="bride">
+                                        <span>女方親友 (麗紘)</span>
+                                    </label>
+                                    <label class="radio-pill">
+                                        <input type="radio" name="relation" value="both">
+                                        <span>共同好友</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-row count-selectors-row">
+                                <div class="form-group">
+                                    <label>出席大人人數 <span class="required">*</span></label>
+                                    <div class="number-counter">
+                                        <button type="button" class="counter-btn minus" data-target="adult-count">-</button>
+                                        <input type="number" id="adult-count" name="adult_count" value="1" min="1" max="10" readonly>
+                                        <button type="button" class="counter-btn plus" data-target="adult-count">+</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>出席幼童人數 (不佔位)</label>
+                                    <div class="number-counter">
+                                        <button type="button" class="counter-btn minus" data-target="kid-count">-</button>
+                                        <input type="number" id="kid-count" name="kid_count" value="0" min="0" max="10" readonly>
+                                        <button type="button" class="counter-btn plus" data-target="kid-count">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4: Dietary & Special Needs (Conditional) -->
+                        <div class="form-step" data-step="4" id="step-diet">
+                            <h3 class="step-title">餐飲與特殊需求</h3>
+                            
+                            <div class="form-group">
+                                <label>請問您的飲食需求是？ <span class="required">*</span></label>
+                                <div class="diet-inputs">
+                                    <div class="form-row">
+                                        <span>葷食席位人數</span>
+                                        <div class="number-counter sm">
+                                            <button type="button" class="counter-btn minus" data-target="meat-count">-</button>
+                                            <input type="number" id="meat-count" name="meat_count" value="1" min="0" max="10" readonly>
+                                            <button type="button" class="counter-btn plus" data-target="meat-count">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <span>素食席位人數</span>
+                                        <div class="number-counter sm">
+                                            <button type="button" class="counter-btn minus" data-target="veg-count">-</button>
+                                            <input type="number" id="veg-count" name="veg_count" value="0" min="0" max="10" readonly>
+                                            <button type="button" class="counter-btn plus" data-target="veg-count">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>幼兒座椅需求數量</label>
+                                <div class="number-counter">
+                                    <button type="button" class="counter-btn minus" data-target="chair-count">-</button>
+                                    <input type="number" id="chair-count" name="chair_count" value="0" min="0" max="5" readonly>
+                                    <button type="button" class="counter-btn plus" data-target="chair-count">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 5: Transportation (Conditional) -->
+                        <div class="form-step" data-step="5" id="step-transport">
+                            <h3 class="step-title">交通資訊統計</h3>
+                            <p class="step-subtitle">請問您這天預計以何種方式前往會場？</p>
+                            
+                            <div class="option-card-group">
+                                <label class="option-card">
+                                    <input type="radio" name="transport" value="drive" required checked>
+                                    <div class="option-card-content">
+                                        <div class="option-icon">🚗</div>
+                                        <div class="option-title">自行開車</div>
+                                        <div class="option-desc">我會開車前來（餐廳旁備有停車場）</div>
+                                    </div>
+                                </label>
+
+                                <label class="option-card">
+                                    <input type="radio" name="transport" value="shuttle">
+                                    <div class="option-card-content">
+                                        <div class="option-icon">🚌</div>
+                                        <div class="option-title">希望搭乘大眾運輸</div>
+                                        <div class="option-desc">抵達鄰近車站後轉搭計程車或公車。</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="option-card">
+                                    <input type="radio" name="transport" value="other">
+                                    <div class="option-card-content">
+                                        <div class="option-icon">🚶</div>
+                                        <div class="option-title">其他方式 / 在地居民</div>
+                                        <div class="option-desc">散步、騎車或其他方式抵達。</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- STEP 6: Wishes & Submit -->
+                        <div class="form-step" data-step="6">
+                            <h3 class="step-title">給新人的溫馨祝福</h3>
+                            <div class="form-group">
+                                <label for="wishes">留下祝福的話語 <span class="required">*</span></label>
+                                <textarea id="wishes" name="wishes" rows="4" placeholder="寫下對 祥宇 & 麗紘 的祝福吧！您的支持是我們最大的力量..." required></textarea>
+                                <span class="error-msg">請填寫此欄位，讓新人接收您的溫暖祝福</span>
+                            </div>
+                        </div>
+
+                        <!-- Navigation buttons -->
+                        <div class="form-nav-btn-group">
+                            <button type="button" id="prev-btn" class="btn outline-btn" disabled>上一步</button>
+                            <button type="button" id="next-btn" class="btn primary-btn">下一步</button>
+                            <button type="submit" id="submit-btn" class="btn primary-btn" style="display: none;">送出回覆</button>
+                        </div>
+
+                    </form>
+
+                    <!-- Submission Success Screen -->
+                    <div id="rsvp-success-screen" class="rsvp-success-screen" style="display: none;">
+                        <div class="success-icon">💐</div>
+                        <h3 class="success-title">表單送出成功！</h3>
+                        <p class="success-message">親愛的 <span id="confirmed-guest-name">貴賓</span>，我們已成功收到您的回覆。</p>
+                        <p class="success-details">期待與您在 <b>2026年9月27日</b> 相見，您的到來與祝福將是我們最珍貴的禮物！</p>
+                        
+                        <div class="confirmed-summary-box">
+                            <h4>您的填寫摘要：</h4>
+                            <ul id="confirmed-details-list">
+                                <!-- JS will inject summary -->
+                            </ul>
+                        </div>
+
+                        <button type="button" id="edit-rsvp-btn" class="btn outline-btn btn-sm">修改回覆內容</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="wedding-footer">
+            <div class="container text-center">
+                <p class="footer-names">祥宇 & 麗紘</p>
+                <p class="footer-thankyou">Thank You for Being a Part of Our Joy</p>
+                <p class="footer-copyright">&copy; 2026 Xiangyu & Lihong. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- JS Files -->
+    <script src="index.js"></script>
+</body>
+</html>
