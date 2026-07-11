@@ -865,19 +865,35 @@ body {
 .timeline-img-wrapper {
     position: relative;
     width: 100%;
-    height: 260px; /* 增加高度以容納更多人物上半身，減少裁切 */
+    height: auto; /* 電腦與手機版皆自適應高度，100% 呈現原始相片防裁切 */
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     margin-bottom: 15px;
 }
 
+.timeline-img-wrapper.has-grid {
+    height: 260px; /* 拼圖六宮格維持固定高度以防塌陷 */
+}
+
 .timeline-img {
     width: 100%;
-    height: 100%;
+    height: auto; /* 改為 auto 支援自適應高度 */
+    display: block; /* 塊級元素以去除底部白邊 */
     object-fit: cover;
     object-position: center 22%; /* 預設焦距鎖定在上半身/面部區塊，防止遮臉 */
     transition: transform 1s ease;
+}
+
+/* 焦距定位輔助類別 (解決直立/橫式照片臉部裁剪問題) */
+.focus-top {
+    object-position: center 12% !important;
+}
+.focus-high {
+    object-position: center 25% !important;
+}
+.focus-mid {
+    object-position: center 50% !important;
 }
 
 /* 美食點滴六宮格拼圖樣式 */
@@ -896,6 +912,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 20%; /* 讓美食六宮格內的人像頭部往上移，防止截頭 */
     transition: transform 0.4s ease;
 }
 
@@ -981,9 +998,15 @@ body {
     .timeline-item::after {
         left: 14px !important;
     }
-    
     .timeline-img-wrapper {
-        height: 160px;
+        height: auto; /* 手機版自適應高度，防止裁切 */
+    }
+    .timeline-img-wrapper.has-grid {
+        height: 180px; /* 手機版美食網格高度適當縮小，維持比例 */
+    }
+    .timeline-img {
+        height: auto;
+        max-height: 380px; /* 防止圖片太高 */
     }
 }
 
@@ -1351,8 +1374,9 @@ body {
     .gallery-item.large {
         grid-column: span 1;
     }
-    .gallery-item.large .gallery-img {
-        height: 220px;
+    .gallery-img, .gallery-item.large .gallery-img {
+        height: auto !important; /* 手機端長寬比自適應，呈現完整婚紗照防截臉 */
+        max-height: 450px; /* 限制直式照片手機端最大高度 */
     }
 }
 
