@@ -2926,3 +2926,55 @@ body {
 }
 
 
+
+
+/* ==========================================================================
+   手機端 3D 翻頁書文字防截斷與高自適應優化 (Mobile Flipbook Text Fix)
+   ========================================================================== */
+@media (max-width: 640px) {
+    .flipbook-stage {
+        height: 490px !important;
+    }
+
+    .flip-page {
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 14px 14px 12px 14px !important;
+        justify-content: flex-start !important;
+    }
+
+    .flip-page-img-container {
+        flex: none !important;
+        height: 200px !important;
+        max-height: 200px !important;
+        padding: 6px !important;
+    }
+
+    .flip-page-content {
+        flex: 1 !important;
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: flex-start !important;
+        overflow-y: auto !important;
+        padding: 0 4px 6px 4px !important;
+        margin-top: 2px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .flip-page-date {
+        font-size: 0.95rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .flip-page-title {
+        font-size: 1.2rem !important;
+        margin-bottom: 6px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .flip-page-desc {
+        font-size: 0.9rem !important;
+        line-height: 1.65 !important;
+        padding-bottom: 6px !important;
+    }
+}
