@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>祥宇&麗紘 喜帖</title>
+    <title>祥宇 ❤️ 麗紘 喜帖</title>
     
     <!-- Google Fonts for Elegant Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,14 +14,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chinese-fonts/iansui/dist/Iansui/result.css">
 
     <!-- Main Style Sheet -->
-    <link rel="stylesheet" href="index.css?v=1.4">
+    <link rel="stylesheet" href="index.css?v=5.0">
 </head>
 <body>
 
     <!-- Sakura Canvas Animation (櫻花飄落特效畫布) -->
     <canvas id="sakura-canvas"></canvas>
 
-    <!-- Splash Screen Overlay (開場前導頁 & 朦朧信封) -->
+        <!-- Splash Screen Overlay (開場前導頁 & 朦朧信封) -->
     <div id="splash-screen" class="splash-screen">
 
         <div class="envelope-container">
@@ -33,7 +33,7 @@
                 <!-- 信封內卡 (包含Q版動畫與文字) -->
                 <div class="envelope-card">
                     <div class="splash-header">
-                        <h2 class="splash-title">祥宇 <span class="splash-amp">&</span> 麗紘</h2>
+                        <h2 class="splash-title">祥宇 <span class="splash-amp heart-symbol">❤️</span> 麗紘</h2>
                         <p class="splash-subtitle">Wedding Invitation</p>
                         <div class="splash-divider"></div>
                     </div>
@@ -115,7 +115,7 @@
             <div class="hero-bg-overlay"></div>
             <div class="hero-content container">
                 <span class="hero-subtitle scroll-reveal">Save the Date</span>
-                <h1 class="hero-title scroll-reveal">祥宇 <span class="ampersand">&</span> 麗紘</h1>
+                <h1 class="hero-title scroll-reveal">祥宇 <span class="ampersand heart-symbol">❤️</span> 麗紘</h1>
                 <div class="wedding-photo-frame scroll-reveal">
                     <img src="images/wedding02-02.jpg" alt="祥宇與麗紘的婚紗照" class="hero-wedding-img">
                     <div class="frame-border"></div>
@@ -211,25 +211,33 @@
                         </div>
                     </div>
 
-                    <!-- Parents Card (雙方家長) -->
-                    <div class="event-card scroll-reveal">
-                        <div class="event-card-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
+                    <!-- Parents Card (雙方家長 - 男左女右並排區塊) -->
+                <div class="event-card parents-card scroll-reveal">
+                    <div class="event-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="event-card-title" style="margin-bottom: 20px;">雙方家長</h3>
+                    
+                    <div class="parents-grid">
+                        <!-- 男方主婚人 (左) -->
+                        <div class="parent-column">
+                            <span class="parent-role-title">男方主婚人</span>
+                            <div class="parent-names">賴明福 <span class="heart-symbol">❤️</span> 楊小慧</div>
                         </div>
-                        <h3 class="event-card-title">雙方家長</h3>
-                        <p class="event-card-info" style="margin-bottom: 12px;">
-                            <span class="bold" style="color: var(--primary-dark); font-size: 1.1rem; display: block; margin-bottom: 4px;">男方主婚人</span>
-                            賴明福 ＆ 楊小慧
-                        </p>
-                        <p class="event-card-info">
-                            <span class="bold" style="color: var(--primary-dark); font-size: 1.1rem; display: block; margin-bottom: 4px;">女方主婚人</span>
-                            黃源彬 ＆ 江梅仙
-                        </p>
+
+                        <!-- 垂直分隔線 -->
+                        <div class="parents-divider"></div>
+
+                        <!-- 女方主婚人 (右) -->
+                        <div class="parent-column">
+                            <span class="parent-role-title">女方主婚人</span>
+                            <div class="parent-names">黃源彬 <span class="heart-symbol">❤️</span> 江梅仙</div>
+                        </div>
                     </div>
                 </div>
 
@@ -274,6 +282,7 @@
         </section>
 
         <!-- 3. Invitation Letter Section (歡迎致辭) -->
+        <!-- 3. Invitation Letter Section (歡迎致辭) -->
         <section id="welcome" class="welcome-section section-padding">
             <div class="container text-center">
                 <div class="welcome-card scroll-reveal">
@@ -281,235 +290,469 @@
                     <h2 class="welcome-title">💖 我們結婚了 💖</h2>
                     <div class="letter-content">
                         <p class="letter-dear">親愛的親朋好友們：</p>
-                        <p>在這充滿幸福的日子裡，我們要結婚了💍 誠摯邀請您與我們一同分享喜悅，見證我們邁向人生的下一個階段。</p>
-                        <p>您的祝福對我們來說意義非凡。為求宴席安排盡善盡美，再麻煩您撥空協助填寫出席表單，方便我們統計人數與規劃座位。由衷感謝您的祝福與配合！✨</p>
+                        <p>在這充滿幸福的日子裡，我們要結婚了。誠摯邀請您來參加我們的婚宴，與我們一同分享這份喜悅與幸福！</p>
                     </div>
-                    
-                    <!-- Static Chibi Sticker in Welcome Card -->
-                    <div class="chibi-static-container scroll-reveal">
-                        <img src="images/chibi_hug.png" alt="Q版甜蜜擁抱" class="chibi-static-hug">
-                    </div>
-
-                    <div class="flower-icon bottom">🌸</div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. Our Story Section (我們的點點滴滴) -->
-        <section id="story" class="story-section section-padding">
+        <!-- 4. 我們的相處點滴 (Timeline Section) -->
+        <section id="timeline" class="timeline-section section-padding">
             <div class="container">
                 <div class="section-header text-center scroll-reveal">
                     <span class="section-subtitle">Our Story</span>
                     <h2 class="section-title">我們的相處點滴</h2>
-                    <div class="header-divider"></div>
                 </div>
 
-                <!-- Timeline -->
-                <div class="timeline">
-                    <!-- Timeline Item 1 (2022.12.12 - mem01) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem01.jpg" alt="相處點滴 1" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2022.12.12</div>
-                            <h3 class="timeline-title">故事的序章</h3>
-                            <p class="timeline-desc">在愛上你以前，不吃鴨的我與缺乏社交能量的你， 因為一場薑母鴨聚餐而有了交集。那是一段跨越兩校之間的距離，屬於我們故事的序章。</p>
-                        </div>
+                <!-- 視角切換器 (預設大寶視角/新郎) -->
+                <div class="timeline-view-switcher scroll-reveal">
+                    <div class="timeline-switcher">
+                        <button id="btn-view-groom" class="switch-btn active" aria-label="切換大寶視角">
+                            <img src="images/chibi_groom.png" alt="新郎頭像" class="switch-avatar avatar">
+                            <span>大寶視角 👨</span>
+                        </button>
+                        <button id="btn-view-bride" class="switch-btn" aria-label="切換小寶視角">
+                            <img src="images/chibi_bride.png" alt="新娘頭像" class="switch-avatar avatar">
+                            <span>小寶視角 👩</span>
+                        </button>
+                        <span class="switcher-slider"></span>
                     </div>
+                </div>
 
-                    <!-- Timeline Item 2 (2023.01.06 - mem02) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem02.jpg" alt="相處點滴 2" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.01.06</div>
-                            <h3 class="timeline-title">吃燒烤、去爬山</h3>
-                            <p class="timeline-desc">接著我們去吃燒烤、去爬山</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 3 (2023.05.01 - mem03) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem03.jpg" alt="相處點滴 3" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.05.01</div>
-                            <h3 class="timeline-title">陪著姊姊們慶生</h3>
-                            <p class="timeline-desc">陪著姊姊們慶生，四處去玩</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 4 (2023.06.01 - mem04) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem04.jpg" alt="相處點滴 4" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.06.01</div>
-                            <h3 class="timeline-title">專屬生日派對</h3>
-                            <p class="timeline-desc">愛上你的那一年，在姊姊們與媒人的熱心引薦下，我為你籌辦一場生日派對。</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 5 (2023.07.01 - mem05) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem05.jpg" alt="相處點滴 5" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.07.01</div>
-                            <h3 class="timeline-title">我們在一起了</h3>
-                            <p class="timeline-desc">這一天，我們在一起了</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 6 (2023.07.18 - mem07) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem07.jpg" alt="相處點滴 6" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.07.18</div>
-                            <h3 class="timeline-title">第一場電影</h3>
-                            <p class="timeline-desc">甚至第一次看電影的票都是姊姊們送的XD</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 7 (2023.11.10 - mem06) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem06.jpg" alt="相處點滴 7" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.11.10</div>
-                            <h3 class="timeline-title">取得碩士學位</h3>
-                            <p class="timeline-desc">後來你陪我寫論文拿到碩士學位</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 8 (2025.01.11 - mem08) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem08.jpg" alt="相處點滴 8" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2025.01.11</div>
-                            <h3 class="timeline-title">融入彼此的生活</h3>
-                            <p class="timeline-desc">最後我們一步一步認識了彼此的朋友、家人，正式進入彼此的生活。</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 9 (2023~2026 - eat01~eat06) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper has-grid">
-                            <!-- 吃吃喝喝美食六宮格拼圖 -->
-                            <div class="timeline-img-grid">
-                                <img src="images/eat01.jpg" alt="美食點滴 1" class="timeline-grid-img">
-                                <img src="images/eat02.jpg" alt="美食點滴 2" class="timeline-grid-img">
-                                <img src="images/eat03.jpg" alt="美食點滴 3" class="timeline-grid-img">
-                                <img src="images/eat04.jpg" alt="美食點滴 4" class="timeline-grid-img">
-                                <img src="images/eat05.jpg" alt="美食點滴 5" class="timeline-grid-img">
-                                <img src="images/eat06.jpg" alt="美食點滴 6" class="timeline-grid-img">
+                <!-- 方案 A：3D 擬真電子翻頁書 (3D Flipbook Album) -->
+        <div class="flipbook-section-container scroll-reveal">
+            
+            <div class="flipbook-stage">
+                <div class="flipbook-book">
+                    
+                    <!-- =================================================== -->
+                    <!-- =================================================== -->
+                    <!-- 大寶視角 (新郎 16 頁相簿) -->
+                    <!-- ======                    <!-- =================================================== -->
+                    <!-- 大寶視角 (新郎 16 頁相簿) -->
+                    <!-- =================================================== -->
+                    <div id="flipbook-groom" class="flipbook-perspective active-perspective">
+                        
+                        <!-- 頁 1 (2022.12.12 - mem01) -->
+                        <div class="flip-page active-page" data-page="1">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem01.jpg" alt="故事的序章">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2022.12.12</div>
+                                <h3 class="flip-page-title">故事的序章</h3>
+                                <p class="flip-page-desc">在愛上你以前，不吃鴨的我與缺乏社交能量的你， 因為一場薑母鴨聚餐而有了交集。那是一段跨越兩校之間的距離，屬於我們故事的序章。</p>
                             </div>
                         </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023 ~ 2026</div>
-                            <h3 class="timeline-title">躺平吃吃喝喝</h3>
-                            <p class="timeline-desc">這些年我從原本的工作狂開始學著躺平，陪著你四處走走吃吃喝喝</p>
+
+                        <!-- 頁 2 (2023.01.06 - mem02) -->
+                        <div class="flip-page" data-page="2">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem02.jpg" alt="吃燒烤、去爬山">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.01.06</div>
+                                <h3 class="flip-page-title">吃燒烤、去爬山</h3>
+                                <p class="flip-page-desc">接著我們去吃燒烤、去爬山</p>
+                            </div>
                         </div>
+
+                        <!-- 頁 3 (2023.05.01 - mem03) -->
+                        <div class="flip-page" data-page="3">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem03.jpg" alt="陪著姊姊們慶生">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.05.01</div>
+                                <h3 class="flip-page-title">陪著姊姊們慶生</h3>
+                                <p class="flip-page-desc">陪著姊姊們慶生，四處去玩</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 4 (2023.06.01 - mem04) -->
+                        <div class="flip-page" data-page="4">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem04.jpg" alt="專屬生日派對">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.06.01</div>
+                                <h3 class="flip-page-title">專屬生日派對</h3>
+                                <p class="flip-page-desc">愛上你的那一年，在姊姊們與媒人的熱心引薦下，我為你籌辦一場生日派對。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 5 (2023.07.01 - mem05) -->
+                        <div class="flip-page" data-page="5">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem05.jpg" alt="我們在一起了">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.07.01</div>
+                                <h3 class="flip-page-title">我們在一起了</h3>
+                                <p class="flip-page-desc">這一天，我們在一起了</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 6 (2023.07.18 - mem07) -->
+                        <div class="flip-page" data-page="6">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem07.jpg" alt="第一場電影">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.07.18</div>
+                                <h3 class="flip-page-title">第一場電影</h3>
+                                <p class="flip-page-desc">甚至第一次看電影的票都是姊姊們送的XD</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 7 (2023.11.10 - mem06) -->
+                        <div class="flip-page" data-page="7">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem06.jpg" alt="取得碩士學位">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.11.10</div>
+                                <h3 class="flip-page-title">取得碩士學位</h3>
+                                <p class="flip-page-desc">後來你陪我寫論文拿到碩士學位</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 8 (2025.01.11 - mem08) -->
+                        <div class="flip-page" data-page="8">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem08.jpg" alt="融入彼此的生活">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2025.01.11</div>
+                                <h3 class="flip-page-title">融入彼此的生活</h3>
+                                <p class="flip-page-desc">最後我們一步一步認識了彼此的朋友、家人，正式進入彼此的生活。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 9 (2023 ~ 2026 - 拍立得美食拼貼卡片) -->
+                        <div class="flip-page" data-page="9">
+                            <div class="flip-page-img-container">
+                                <div class="flip-page-polaroid-collage">
+                                    <div class="polaroid-card p1">
+                                        <img src="images/eat01.jpg" alt="美食 1">
+                                    </div>
+                                    <div class="polaroid-card p2">
+                                        <img src="images/eat02.jpg" alt="美食 2">
+                                    </div>
+                                    <div class="polaroid-card p3">
+                                        <img src="images/eat03.jpg" alt="美食 3">
+                                    </div>
+                                    <div class="polaroid-card p4">
+                                        <img src="images/eat04.jpg" alt="美食 4">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023 ~ 2026</div>
+                                <h3 class="flip-page-title">躺平吃吃喝喝</h3>
+                                <p class="flip-page-desc">這些年我從原本的工作狂開始學著躺平，陪著你四處走走吃吃喝喝。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 10 (2026 - mem09) -->
+                        <div class="flip-page" data-page="10">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem09.jpg" alt="達成 1000 天紀念">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2026</div>
+                                <h3 class="flip-page-title">達成 1000 天紀念</h3>
+                                <p class="flip-page-desc">甚至ai騙了我兩次不過還是達成1000天的紀念。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 11 (2026 - mem10) -->
+                        <div class="flip-page" data-page="11">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem10.jpg" alt="用一輩子的運氣遇見你">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2026</div>
+                                <h3 class="flip-page-title">用一輩子的運氣遇見你</h3>
+                                <p class="flip-page-desc">我總說：我用了一輩子的運氣來遇見了你。遇見一個貼心、溫柔，且願意包容我火爆脾氣的你。是提醒我要放輕鬆、要休息，無條件接住我的情緒、呵護著我的你。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 12 (2023.10.14 - wed01) -->
+                        <div class="flip-page" data-page="12">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed01.jpg" alt="麗雯妹妹的婚禮">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.10.14</div>
+                                <h3 class="flip-page-title">麗雯妹妹的婚禮</h3>
+                                <p class="flip-page-desc">經過麗雯妹妹的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 13 (2023.12.30 - wed02) -->
+                        <div class="flip-page" data-page="13">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed02.jpg" alt="夥伴雅婷的婚禮">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.12.30</div>
+                                <h3 class="flip-page-title">夥伴雅婷的婚禮</h3>
+                                <p class="flip-page-desc">經過夥伴雅婷的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 14 (2024.12.15 - wed03) -->
+                        <div class="flip-page" data-page="14">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed03.jpg" alt="兄弟秉旻的婚禮">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2024.12.15</div>
+                                <h3 class="flip-page-title">兄弟秉旻的婚禮</h3>
+                                <p class="flip-page-desc">經過兄弟秉旻的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 15 (2025.03.02 - wed04) -->
+                        <div class="flip-page" data-page="15">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed04.jpg" alt="媒人幸蓉的婚禮">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2025.03.02</div>
+                                <h3 class="flip-page-title">媒人幸蓉的婚禮</h3>
+                                <p class="flip-page-desc">經過媒人幸蓉的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 16 (2026.09.27 - wedding01-05) -->
+                        <div class="flip-page" data-page="16">
+                            <div class="flip-page-img-container">
+                                <img src="images/wedding01-05.jpg" alt="邁向新旅程">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2026.09.27</div>
+                                <h3 class="flip-page-title">邁向新旅程</h3>
+                                <p class="flip-page-desc">接下來我們將在這一天邁向新旅程，在所有至親好友的見證下，交換誓言。邀請大家一同來參與，見證我們生命中最重要的幸福起點。</p>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Timeline Item 10 (2026 - mem09) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem09.jpg" alt="相處點滴 9" class="timeline-img focus-high">
+                    <!-- =================================================== -->
+                    <div id="flipbook-bride" class="flipbook-perspective inactive-perspective" style="display:none;">
+                        
+                        <!-- 頁 1 -->
+                        <div class="flip-page active-page" data-page="1">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem01.jpg" alt="故事的序章">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2022.11.31</div>
+                                <h3 class="flip-page-title">故事的序章</h3>
+                                <p class="flip-page-desc">一個明明就不吃鴨卻赴了薑母鴨的約的奇怪男子，一個總是想躺平但是因為想在冷冷的天來上一碗熱熱的湯努力爬起來的女子，莫名其妙碰頭的兩人究竟會開啟什麼樣的故事呢?讓我們繼續看下去......</p>
+                            </div>
                         </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2026</div>
-                            <h3 class="timeline-title">達成 1000 天紀念</h3>
-                            <p class="timeline-desc">甚至ai騙了我兩次不過還是達成1000天的紀念</p>
+
+                        <!-- 頁 2 -->
+                        <div class="flip-page" data-page="2">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem02.jpg" alt="爬山篇">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.02.11</div>
+                                <h3 class="flip-page-title">爬山篇</h3>
+                                <p class="flip-page-desc">這位很懶的女子因為有一陣子頭殼去撞到，所以自己現在看也覺得很神奇的就赴了爬山的約，遇到了這位姊姊們口中說一起吃過薑母鴨的男子….阿喔，此時其實女子腦袋裡沒有什麼對這個人的印象，因為只記得薑母鴨很好吃…</p>
+                            </div>
                         </div>
+
+                        <!-- 頁 3 -->
+                        <div class="flip-page" data-page="3">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem13.jpg" alt="燒烤篇">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.02.28</div>
+                                <h3 class="flip-page-title">燒烤篇</h3>
+                                <p class="flip-page-desc">宜蘭很好吃的燒烤店，嘿嘿，其他地方想吃還吃不到勒，見面都在吃吃喝喝玩玩的兩個人，當天應該是很認真地聽哥哥姊姊們聊八卦</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 4 -->
+                        <div class="flip-page" data-page="4">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem12.jpg" alt="芹姐卡哥生日篇">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.03.24</div>
+                                <h3 class="flip-page-title">芹姐卡哥生日篇</h3>
+                                <p class="flip-page-desc">其實真的比較認識是這一天唷～還記得有位男子從宜蘭騎腳踏車來參加姐姐的生日趴踢，我那時候可能覺得這男的好像瘋瘋的，一起吃完義大利麵的大家又去欣賞佛光山的百萬夜景，姊姊們戲稱要他騎腳踏車上去，好好玩呀~夜景真的很讚</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 5 -->
+                        <div class="flip-page" data-page="5">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem03.jpg" alt="Kiwi姐生日篇">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.05.01</div>
+                                <h3 class="flip-page-title">Kiwi姐生日篇</h3>
+                                <p class="flip-page-desc">一起大老遠跑去羅東吃泰式料理，很好吃耶!!大推一波(劃錯重點…總之慶生完下一次就是我的生日了，所以姐姐要這位男子負責準備，我們是那天才加了賴(也太晚</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 6 -->
+                        <div class="flip-page" data-page="6">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem11.jpg" alt="我的生日派對">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.06.01</div>
+                                <h3 class="flip-page-title">我的生日派對</h3>
+                                <p class="flip-page-desc">跟哥哥姊姊們還有小混蛋三人組一起慶祝，真是難忘的回憶，涓豆腐還是第一次吃，覺得在宜蘭有很多的第一次，我愛宜蘭~吃完之後必去的景點就是”湯姆熊”，竟然換了1000元代幣讓我玩到瘋~~推薦大家去開頭文字D，成為賽車手~</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 7 -->
+                        <div class="flip-page" data-page="7">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem06.jpg" alt="6.3">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.06.03</div>
+                                <h3 class="flip-page-title">6.3</h3>
+                                <p class="flip-page-desc">由本女子主揪的最愛行程_好樂迪唱歌，我想我此生離不開的就是湯姆熊跟好樂迪，哈哈~~我們這位男高音第一首就唱擱淺，真是勇氣十足，不得不說，我們這團的人都太會唱了~唱完之後又去把沒玩完的代幣玩完，爽爽的</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 8 -->
+                        <div class="flip-page" data-page="8">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem05.jpg" alt="我們在一起了">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.07.01</div>
+                                <h3 class="flip-page-title">我們在一起了</h3>
+                                <p class="flip-page-desc">故事有點快轉的感覺，總之這天這位男士又騎著腳踏車帶著一束花上門，真是非常的有毅力</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 9 -->
+                        <div class="flip-page" data-page="9">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem07.jpg" alt="第一場電影">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.07.18</div>
+                                <h3 class="flip-page-title">第一場電影</h3>
+                                <p class="flip-page-desc">姊姊們送給這位男士的電影票，說可以約我去看電影，哈~抱歉了姊姊們，其實我們現在是進行式。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 10 -->
+                        <div class="flip-page" data-page="10">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem14.jpg" alt="成為一家人">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2024.12.14</div>
+                                <h3 class="flip-page-title">成為一家人</h3>
+                                <p class="flip-page-desc">我們認識了彼此的家人</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 11 (上下雙圖拼貼展示) -->
+                        <div class="flip-page" data-page="11">
+                            <div class="flip-page-img-container">
+                                <div class="flip-page-grid-vertical">
+                                    <img src="images/mem16.jpg" alt="認識好朋友 1">
+                                    <img src="images/mem17.jpg" alt="認識好朋友 2">
+                                </div>
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2025.12.12</div>
+                                <h3 class="flip-page-title">認識好朋友</h3>
+                                <p class="flip-page-desc">大寶有空就帶著我吃吃喝喝，四處去找我的好朋友們，包括港港跟宜蘭的姊姊們。</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 12 -->
+                        <div class="flip-page" data-page="12">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed01.jpg" alt="我的好姐妹">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.10.14</div>
+                                <h3 class="flip-page-title">我的好姐妹</h3>
+                                <p class="flip-page-desc">一起參加過小秋秋跟小屁的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 13 -->
+                        <div class="flip-page" data-page="13">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed02.jpg" alt="大寶的小夥伴">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2023.12.30</div>
+                                <h3 class="flip-page-title">大寶的小夥伴</h3>
+                                <p class="flip-page-desc">一起參加過雅婷的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 14 -->
+                        <div class="flip-page" data-page="14">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed03.jpg" alt="大寶的好兄弟">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2024.12.15</div>
+                                <h3 class="flip-page-title">大寶的好兄弟</h3>
+                                <p class="flip-page-desc">一起參加過秉旻的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 15 -->
+                        <div class="flip-page" data-page="15">
+                            <div class="flip-page-img-container">
+                                <img src="images/wed04.jpg" alt="美麗的媒人婆">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2025.03.02</div>
+                                <h3 class="flip-page-title">美麗的媒人婆</h3>
+                                <p class="flip-page-desc">一起參與過kiwi姊姊的婚禮</p>
+                            </div>
+                        </div>
+
+                        <!-- 頁 16 -->
+                        <div class="flip-page" data-page="16">
+                            <div class="flip-page-img-container">
+                                <img src="images/mem15.jpg" alt="邁向新旅程">
+                            </div>
+                            <div class="flip-page-content">
+                                <div class="flip-page-date">2026.05.01</div>
+                                <h3 class="flip-page-title">邁向新旅程</h3>
+                                <p class="flip-page-desc">邁向新旅程</p>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Timeline Item 11 (2026 - mem10) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/mem10.jpg" alt="相處點滴 10" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2026</div>
-                            <h3 class="timeline-title">用一輩子的運氣遇見你</h3>
-                            <p class="timeline-desc">我總說：我用了一輩子的運氣來遇見了你。遇見一個貼心、溫柔，且願意包容我火爆脾氣的你。是提醒我要放輕鬆、要休息，無條件接住我的情緒、呵護著我的你。</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 12 (2023.10.14 - wed01) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/wed01.jpg" alt="相處點滴 11" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.10.14</div>
-                            <h3 class="timeline-title">麗雯妹妹的婚禮</h3>
-                            <p class="timeline-desc">經過麗雯妹妹的婚禮</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 13 (2023.12.30 - wed02) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/wed02.jpg" alt="相處點滴 12" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2023.12.30</div>
-                            <h3 class="timeline-title">夥伴雅婷的婚禮</h3>
-                            <p class="timeline-desc">經過夥伴雅婷的婚禮</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 14 (2024.12.15 - wed03) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/wed03.jpg" alt="相處點滴 13" class="timeline-img focus-high">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2024.12.15</div>
-                            <h3 class="timeline-title">兄弟秉旻的婚禮</h3>
-                            <p class="timeline-desc">經過兄弟秉旻的婚禮</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 15 (2025.03.02 - wed04) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/wed04.jpg" alt="相處點滴 14" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2025.03.02</div>
-                            <h3 class="timeline-title">媒人幸蓉的婚禮</h3>
-                            <p class="timeline-desc">經過媒人幸蓉的婚禮</p>
-                        </div>
-                    </div>
-
-                    <!-- Timeline Item 16 (2026.09.27 - wedding01-05) -->
-                    <div class="timeline-item scroll-reveal">
-                        <div class="timeline-img-wrapper">
-                            <img src="images/wedding01-05.jpg" alt="相處點滴 15" class="timeline-img focus-mid">
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-date">2026.09.27</div>
-                            <h3 class="timeline-title">邁向新旅程</h3>
-                            <p class="timeline-desc">接下來我們將在這一天邁向新旅程，在所有至親好友的見證下，交換誓言。邀請大家一同來參與，見證我們生命中最重要的幸福起點。</p>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </section>
 
-        <!-- 4.5 Engagement Video Section (訂婚花絮影片) -->
+            <!-- 翻頁控制器 (上一頁 / 頁碼 / 下一頁) -->
+            <div class="flipbook-controls">
+                <button id="btn-flip-prev" class="flip-btn" aria-label="上一頁">‹</button>
+                <div class="flip-page-counter">第 <span id="current-page-num">1</span> / <span id="total-page-num">16</span> 頁</div>
+                <button id="btn-flip-next" class="flip-btn" aria-label="下一頁">›</button>
+            </div>
+
+        </div>
+
+    <!-- 4.5 Engagement Video Section (訂婚花絮影片) -->
         <section id="engagement-video" class="video-section section-padding">
             <div class="container">
                 <div class="section-header text-center scroll-reveal">
@@ -684,7 +927,7 @@
         <!-- Footer -->
         <footer class="wedding-footer">
             <div class="container text-center">
-                <p class="footer-names">祥宇 & 麗紘</p>
+                <p class="footer-names">祥宇 ❤️ 麗紘</p>
                 <p class="footer-thankyou">Thank You for Being a Part of Our Joy</p>
                 <p class="footer-copyright">&copy; 2026 Xiangyu & Lihong. All Rights Reserved.</p>
             </div>
@@ -703,6 +946,6 @@
     </div>
 
     <!-- JS Files -->
-    <script src="index.js?v=1.4"></script>
+    <script src="index.js?v=5.0"></script>
 </body>
 </html>

@@ -1,159 +1,52 @@
 /* ==========================================================================
-   祥宇 & 麗紘 0927 網頁喜帖互動邏輯 (JS)
+   祥宇 ❤️ 麗紘 0927 網頁喜帖互動邏輯 (JS)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // 強制停止瀏覽器自動記憶/還原滾動位置，確保每次重新整理都在最上方
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
+
     // ==========================================================================
-    // 1. 背景音樂播放控制
+    // 1. 背景音樂播放控制 (BGM Control)
     // ==========================================================================
     const bgm = document.getElementById('bgm');
     const musicControl = document.getElementById('music-control');
-    let hasInteracted = false;
+    let isPlaying = false;
 
-    // 播放/暫停功能
-    function toggleBGM() {
-        if (bgm.paused) {
-            bgm.play().then(() => {
-                musicControl.classList.add('playing');
-            }).catch(err => {
-                console.log("播放失敗，需要使用者手動點擊：", err);
-            });
-        } else {
-            bgm.pause();
-            musicControl.classList.remove('playing');
-        }
+    // 預設背景音樂音量為 30%
+    if (bgm) {
+        bgm.volume = 0.3;
     }
 
-    musicControl.addEventListener('click', toggleBGM);
-
-    // 首次點擊頁面任何地方嘗試自動播放（因應瀏覽器 Autoplay 政策限制）
-    const startAutoplay = () => {
-        if (!hasInteracted) {
-            hasInteracted = true;
-            // 嘗試播放，若失敗則靜音播放或等待手動點擊
-            bgm.play().then(() => {
-                musicControl.classList.add('playing');
-            }).catch(() => {
-                console.log("背景音樂自動播放受限，等待手動點擊唱片。");
-            });
-            // 移除監聽器以防重複觸發
-            document.removeEventListener('click', startAutoplay);
-            document.removeEventListener('touchstart', startAutoplay);
-        }
-    };
-    
-    document.addEventListener('click', startAutoplay);
-    document.addEventListener('touchstart', startAutoplay);
-
-    // 當 HTML5 訂婚影片開始播放時，自動暫停背景音樂
-    const videoPlayer = document.getElementById('engagement-video-player');
-    if (videoPlayer) {
-        videoPlayer.addEventListener('play', () => {
-            if (bgm && !bgm.paused) {
+    if (musicControl && bgm) {
+        musicControl.addEventListener('click', () => {
+            if (bgm.paused) {
+                bgm.play().then(() => {
+                    isPlaying = true;
+                    musicControl.classList.add('playing');
+                }).catch(err => console.log('BGM Play Error:', err));
+            } else {
                 bgm.pause();
                 musicControl.classList.remove('playing');
             }
         });
     }
 
-
     // ==========================================================================
-    // 2. 倒數計時器 (Countdown Timer)
-    // ==========================================================================
-    const countdownEl = document.getElementById('countdown');
-    const targetDateStr = countdownEl.getAttribute('data-date');
-    const targetDate = new Date(targetDateStr).getTime();
-
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
-
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const difference = targetDate - now;
-
-        if (difference <= 0) {
-            clearInterval(countdownInterval);
-            daysEl.textContent = '00';
-            hoursEl.textContent = '00';
-            minutesEl.textContent = '00';
-            secondsEl.textContent = '00';
-            return;
-        }
-
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        // 加上前導零
-        daysEl.textContent = String(days).padStart(2, '0');
-        hoursEl.textContent = String(hours).padStart(2, '0');
-        minutesEl.textContent = String(minutes).padStart(2, '0');
-        secondsEl.textContent = String(seconds).padStart(2, '0');
-    }
-
-    const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown(); // 立即執行一次
-
-
-    // ==========================================================================
-    // 3. 滾動淡入特效與側邊導覽列 (Scroll Reveal & Nav Highlighter)
-    // ==========================================================================
-    const revealElements = document.querySelectorAll('.scroll-reveal');
-    const sections = document.querySelectorAll('header, section');
-    const navDots = document.querySelectorAll('.nav-dot');
-
-    // 滾動漸顯 IntersectionObserver
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                // 漸顯後不再重複觸發
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    // 側邊導航高亮 IntersectionObserver
-    const navObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const sectionId = entry.target.getAttribute('id');
-                navDots.forEach(dot => {
-                    dot.classList.remove('active');
-                    if (dot.getAttribute('href') === `#${sectionId}`) {
-                        dot.classList.add('active');
-                    }
-                });
-            }
-        });
-    }, {
-        threshold: 0.4 // 區塊佔據螢幕40%時啟動高亮
-    });
-
-    sections.forEach(section => navObserver.observe(section));
-
-
-    // ==========================================================================
-    // 3.5 開場前導頁 (Splash Screen) 與 Q版跑動擁抱動畫控制
+    // 2. 信封前導頁與 3D 開箱動畫 (Splash Screen Envelope Animation - GitHub 1:1 還原版)
     // ==========================================================================
     const splashScreen = document.getElementById('splash-screen');
+    const openBtn = document.getElementById('open-envelope-btn');
+    const envelopeContainer = document.querySelector('.envelope-container');
+    const envelopeBox = document.getElementById('envelope-box');
     const chibiAnimBoxSplash = document.getElementById('chibi-anim-box-splash');
     const chibiHeartsSplash = document.getElementById('chibi-hearts-splash');
     const flashOverlay = document.getElementById('flash-overlay');
+    const mainContent = document.getElementById('main-content');
     let splashChibiAnimated = false;
 
     // 漂浮愛心產生器
@@ -183,10 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500);
     }
 
-    const envelopeContainer = document.querySelector('.envelope-container');
-    const envelopeBox = document.getElementById('envelope-box');
-    const mainContent = document.getElementById('main-content');
-
+    // 3D 開箱動畫主邏輯 (完全還原 GitHub Pages 線上版節奏)
     function runSplashAnimation() {
         if (splashChibiAnimated || !chibiAnimBoxSplash) return;
         splashChibiAnimated = true;
@@ -237,15 +127,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 步驟 6：6.9s 時，信封淡出滑走，且主網頁模糊逐漸退去 (朦朧開箱)
         setTimeout(() => {
-            // 開箱過渡時再次強制將主網頁視角鎖定最頂部，防止重新整理回復在最下方
             window.scrollTo(0, 0);
-            
             if (splashScreen) {
                 splashScreen.classList.add('page-turn');
             }
             if (mainContent) {
                 mainContent.classList.add('main-content-clear');
             }
+            document.body.style.overflow = 'auto'; // 恢復網頁滾動
         }, 6900);
 
         // 步驟 7：8.1s 時，徹底移除前導頁 DOM 節點
@@ -257,15 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 當點擊「開啟喜帖」按鈕時，撥放背景音樂並啟動開箱動畫
-    const openBtn = document.getElementById('open-envelope-btn');
     if (openBtn) {
         openBtn.addEventListener('click', () => {
-            // 撥放音樂（利用賓客的點擊動作直接解鎖瀏覽器 Autoplay 政策限制）
-            if (bgm.paused) {
+            // 撥放音樂（利用賓客的點擊動作解鎖 Autoplay）
+            if (bgm && bgm.paused) {
                 bgm.play().then(() => {
-                    musicControl.classList.add('playing');
+                    isPlaying = true;
+                    if (musicControl) musicControl.classList.add('playing');
                 }).catch(err => {
-                    console.log("音樂播放失敗，已靜音：", err);
+                    console.log("背景音樂自動播放受限：", err);
                 });
             }
             // 按鈕淡出動效並銷毀
@@ -281,315 +170,373 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 防卡住雙擊快速跳過
+    if (splashScreen) {
+        splashScreen.addEventListener('dblclick', () => {
+            if (splashScreen) splashScreen.remove();
+            document.body.style.overflow = 'auto';
+        });
+    }
 
     // ==========================================================================
-    // 4. 婚紗相簿燈箱功能 (Lightbox Gallery)
+    
+
     // ==========================================================================
+    // 方案 A：3D 擬真電子翻頁書互動邏輯 (3D Flipbook Logic)
+    // ==========================================================================
+    const btnGroom = document.getElementById('btn-view-groom');
+    const btnBride = document.getElementById('btn-view-bride');
+    const flipbookGroom = document.getElementById('flipbook-groom');
+    const flipbookBride = document.getElementById('flipbook-bride');
+    const timelineSwitcher = document.querySelector('.timeline-switcher');
+
+    const btnFlipPrev = document.getElementById('btn-flip-prev');
+    const btnFlipNext = document.getElementById('btn-flip-next');
+    const currentPageNumEl = document.getElementById('current-page-num');
+    const totalPageNumEl = document.getElementById('total-page-num');
+
+    let currentPerspective = 'groom'; // 'groom' 或 'bride'
+    let currentPageGroom = 1;
+    let currentPageBride = 1;
+
+    function getActivePerspectiveContainer() {
+        return currentPerspective === 'groom' ? flipbookGroom : flipbookBride;
+    }
+
+    function getCurrentPage() {
+        return currentPerspective === 'groom' ? currentPageGroom : currentPageBride;
+    }
+
+    function setCurrentPage(num) {
+        if (currentPerspective === 'groom') {
+            currentPageGroom = num;
+        } else {
+            currentPageBride = num;
+        }
+    }
+
+    function updateFlipbookState() {
+        const container = getActivePerspectiveContainer();
+        if (!container) return;
+
+        const pages = container.querySelectorAll('.flip-page');
+        const totalPages = pages.length;
+        let currentPage = getCurrentPage();
+
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        setCurrentPage(currentPage);
+
+        pages.forEach((page, index) => {
+            const pageNum = index + 1;
+            page.classList.remove('active-page', 'flipped-left', 'flipped-right');
+
+            if (pageNum === currentPage) {
+                page.classList.add('active-page');
+            } else if (pageNum < currentPage) {
+                page.classList.add('flipped-left');
+            } else {
+                page.classList.add('flipped-right');
+            }
+        });
+
+        if (currentPageNumEl) currentPageNumEl.innerText = currentPage;
+        if (totalPageNumEl) totalPageNumEl.innerText = totalPages;
+
+        if (btnFlipPrev) btnFlipPrev.disabled = (currentPage === 1);
+        if (btnFlipNext) btnFlipNext.disabled = (currentPage === totalPages);
+    }
+
+    if (btnFlipPrev) {
+        btnFlipPrev.addEventListener('click', () => {
+            let currentPage = getCurrentPage();
+            if (currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+                updateFlipbookState();
+            }
+        });
+    }
+
+    if (btnFlipNext) {
+        btnFlipNext.addEventListener('click', () => {
+            const container = getActivePerspectiveContainer();
+            const totalPages = container ? container.querySelectorAll('.flip-page').length : 16;
+            let currentPage = getCurrentPage();
+            if (currentPage < totalPages) {
+                setCurrentPage(currentPage + 1);
+                updateFlipbookState();
+            }
+        });
+    }
+
+    // 手動觸發視角切換 (大寶 / 小寶)
+    if (btnGroom && btnBride && flipbookGroom && flipbookBride) {
+        btnGroom.addEventListener('click', () => {
+            if (currentPerspective === 'groom') return;
+
+            currentPerspective = 'groom';
+            btnGroom.classList.add('active');
+            btnBride.classList.remove('active');
+            if (timelineSwitcher) timelineSwitcher.classList.remove('bride-active');
+
+            flipbookBride.style.display = 'none';
+            flipbookGroom.style.display = 'block';
+            updateFlipbookState();
+        });
+
+        btnBride.addEventListener('click', () => {
+            if (currentPerspective === 'bride') return;
+
+            currentPerspective = 'bride';
+            btnBride.classList.add('active');
+            btnGroom.classList.remove('active');
+            if (timelineSwitcher) timelineSwitcher.classList.add('bride-active');
+
+            flipbookGroom.style.display = 'none';
+            flipbookBride.style.display = 'block';
+            updateFlipbookState();
+        });
+    }
+
+    // 支援滑鼠點擊/拖曳與手機觸控滑動直接在相簿/照片上翻頁
+    const flipbookBook = document.querySelector('.flipbook-book');
+    if (flipbookBook) {
+        let isDragging = false;
+        let startX = 0;
+
+        flipbookBook.addEventListener('mousedown', (e) => {
+            isDragging = false;
+            startX = e.clientX;
+        });
+
+        flipbookBook.addEventListener('mousemove', (e) => {
+            if (Math.abs(e.clientX - startX) > 10) {
+                isDragging = true;
+            }
+        });
+
+        flipbookBook.addEventListener('mouseup', (e) => {
+            const dragDistance = e.clientX - startX;
+
+            if (isDragging) {
+                if (dragDistance < -30) {
+                    if (btnFlipNext && !btnFlipNext.disabled) btnFlipNext.click();
+                } else if (dragDistance > 30) {
+                    if (btnFlipPrev && !btnFlipPrev.disabled) btnFlipPrev.click();
+                }
+            } else {
+                const rect = flipbookBook.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                if (clickX > rect.width / 2) {
+                    if (btnFlipNext && !btnFlipNext.disabled) btnFlipNext.click();
+                } else {
+                    if (btnFlipPrev && !btnFlipPrev.disabled) btnFlipPrev.click();
+                }
+            }
+        });
+
+        // 手機觸控
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        flipbookBook.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        flipbookBook.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeDistance = touchEndX - touchStartX;
+
+            if (swipeDistance < -40) {
+                if (btnFlipNext && !btnFlipNext.disabled) btnFlipNext.click();
+            } else if (swipeDistance > 40) {
+                if (btnFlipPrev && !btnFlipPrev.disabled) btnFlipPrev.click();
+            }
+        }, { passive: true });
+    }
+
+    // 初始化翻頁相本狀態
+    updateFlipbookState();
+
+
+    // 4. 婚禮倒數計時器 (Countdown Timer)
+    // ==========================================================================
+    const weddingDate = new Date('2026-09-27T11:30:00+08:00').getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const difference = weddingDate - now;
+
+        if (difference > 0) {
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            const elDays = document.getElementById('days');
+            const elHours = document.getElementById('hours');
+            const elMinutes = document.getElementById('minutes');
+            const elSeconds = document.getElementById('seconds');
+
+            if (elDays) elDays.innerText = String(days).padStart(2, '0');
+            if (elHours) elHours.innerText = String(hours).padStart(2, '0');
+            if (elMinutes) elMinutes.innerText = String(minutes).padStart(2, '0');
+            if (elSeconds) elSeconds.innerText = String(seconds).padStart(2, '0');
+        }
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ==========================================================================
+    // 5. 加入行事曆按鈕 (Google & Apple Calendar)
+    // ==========================================================================
+    const btnGoogleCal = document.getElementById('btn-gcal') || document.getElementById('add-to-google-cal');
+    const btnAppleCal = document.getElementById('btn-ical') || document.getElementById('add-to-apple-cal');
+
+    if (btnGoogleCal) {
+        btnGoogleCal.addEventListener('click', (e) => {
+            e.preventDefault();
+            const title = encodeURIComponent('祥宇 ❤️ 麗紘 的婚禮');
+            const details = encodeURIComponent('誠摯邀請您出席我們的婚宴！\n時間：11:30 入席 | 12:00 開席\n地點：林邊永鑫海鮮餐廳 (屏東縣林邊鄉中山路379號)');
+            const location = encodeURIComponent('林邊永鑫海鮮餐廳, 屏東縣林邊鄉中山路379號');
+            const dates = '20260927T033000Z/20260927T083000Z'; // UTC 時間
+
+            const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+            window.open(url, '_blank');
+        });
+    }
+
+    if (btnAppleCal) {
+        btnAppleCal.addEventListener('click', (e) => {
+            e.preventDefault();
+            const icsData = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Wedding Invitation//ZH-TW',
+                'BEGIN:VEVENT',
+                'SUMMARY:祥宇 ❤️ 麗紘 的婚禮',
+                'DESCRIPTION:誠摯邀請您出席我們的婚宴！\\n時間：11:30 入席 | 12:00 開席\\n地點：林邊永鑫海鮮餐廳 (屏東縣林邊鄉中山路379號)',
+                'LOCATION:林邊永鑫海鮮餐廳, 屏東縣林邊鄉中山路379號',
+                'DTSTART:20260927T033000Z',
+                'DTEND:20260927T083000Z',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\n');
+
+            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', 'wedding-event.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    // ==========================================================================
+    // 6. 訂婚影片與背景音樂連動
+    // ==========================================================================
+    const videoPlayer = document.getElementById('engagement-video-player');
+    if (videoPlayer && bgm) {
+        videoPlayer.addEventListener('play', () => {
+            bgm.pause();
+            if (musicControl) musicControl.classList.remove('playing');
+        });
+        videoPlayer.addEventListener('pause', () => {
+            if (isPlaying) {
+                bgm.play();
+                if (musicControl) musicControl.classList.add('playing');
+            }
+        });
+    }
+
+    // ==========================================================================
+    // 7. 婚紗相簿 Lightbox 燈箱效果
+    // ==========================================================================
+    const galleryItems = document.querySelectorAll('.gallery-item');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
-    const closeBtn = document.querySelector('.lightbox-close');
-    const prevBtn = document.querySelector('.lightbox-prev');
-    const nextBtn = document.querySelector('.lightbox-next');
-    
-    let currentPhotoIndex = 0;
-    let photoUrls = [];
+    const lightboxClose = document.querySelector('.lightbox-close') || document.getElementById('lightbox-close');
+    const lightboxPrev = document.querySelector('.lightbox-prev') || document.getElementById('lightbox-prev');
+    const lightboxNext = document.querySelector('.lightbox-next') || document.getElementById('lightbox-next');
 
-    // 動態讀取所有的照片路徑以防異步加載
-    function updatePhotoUrls() {
-        const imgs = document.querySelectorAll('.gallery-img');
-        photoUrls = Array.from(imgs).map(img => img.src);
-    }
-    updatePhotoUrls();
+    let currentPhotoIndex = 0;
+    const galleryImages = Array.from(document.querySelectorAll('.gallery-item img'));
 
     function openLightbox(index) {
-        if (!lightbox || !lightboxImg) return;
-        updatePhotoUrls();
+        if (!lightbox || !galleryImages[index]) return;
         currentPhotoIndex = index;
-        if (photoUrls[currentPhotoIndex]) {
-            try {
-                lightboxImg.src = photoUrls[currentPhotoIndex];
-                lightbox.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // 鎖定背景捲動
-            } catch (err) {
-                console.error("openLightbox error: ", err);
-            }
-        }
+        if (lightboxImg) lightboxImg.src = galleryImages[currentPhotoIndex].src;
+        lightbox.style.display = 'flex';
+        setTimeout(() => lightbox.classList.add('active'), 10);
     }
 
     function closeLightbox() {
         if (!lightbox) return;
-        lightbox.style.display = 'none';
-        document.body.style.overflow = ''; // 恢復背景捲動
+        lightbox.classList.remove('active');
+        setTimeout(() => lightbox.style.display = 'none', 300);
     }
 
-    function showPrevPhoto() {
-        if (!lightboxImg || photoUrls.length === 0) return;
-        currentPhotoIndex = (currentPhotoIndex - 1 + photoUrls.length) % photoUrls.length;
-        lightboxImg.src = photoUrls[currentPhotoIndex];
+    galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => openLightbox(index));
+    });
+
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentPhotoIndex = (currentPhotoIndex - 1 + galleryImages.length) % galleryImages.length;
+            openLightbox(currentPhotoIndex);
+        });
+    }
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentPhotoIndex = (currentPhotoIndex + 1) % galleryImages.length;
+            openLightbox(currentPhotoIndex);
+        });
     }
 
-    function showNextPhoto() {
-        if (!lightboxImg || photoUrls.length === 0) return;
-        currentPhotoIndex = (currentPhotoIndex + 1) % photoUrls.length;
-        lightboxImg.src = photoUrls[currentPhotoIndex];
-    }
+    // ==========================================================================
+    // 8. RSVP 表單計數器
+    // ==========================================================================
+    const counters = document.querySelectorAll('.counter-wrapper');
+    counters.forEach(counter => {
+        const input = counter.querySelector('input');
+        const minusBtn = counter.querySelector('.minus');
+        const plusBtn = counter.querySelector('.plus');
 
-    // 採用最強韌的事件委派（Event Delegation）綁定點擊，防止任何內層覆蓋元素攔截點擊
-    const galleryGrid = document.querySelector('.gallery-grid');
-    if (galleryGrid) {
-        galleryGrid.addEventListener('click', (e) => {
-            const item = e.target.closest('.gallery-item');
-            if (item) {
+        if (input && minusBtn && plusBtn) {
+            minusBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                
-                const allItems = Array.from(document.querySelectorAll('.gallery-item'));
-                const index = allItems.indexOf(item);
-                if (index !== -1) {
-                    openLightbox(index);
+                let val = parseInt(input.value) || 0;
+                let min = parseInt(input.getAttribute('min')) || 0;
+                if (val > min) {
+                    input.value = val - 1;
                 }
-            }
-        });
-    }
-
-    // 安全防錯事件監聽綁定
-    if (lightbox) {
-        if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
-        if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrevPhoto(); });
-        if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNextPhoto(); });
-
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox || e.target.classList.contains('lightbox-content-container')) {
-                closeLightbox();
-            }
-        });
-
-        // 鍵盤導覽
-        document.addEventListener('keydown', (e) => {
-            if (lightbox.style.display === 'block') {
-                if (e.key === 'Escape') closeLightbox();
-                if (e.key === 'ArrowLeft') showPrevPhoto();
-                if (e.key === 'ArrowRight') showNextPhoto();
-            }
-        });
-    }
-
-
-    // ==========================================================================
-    // 5. RSVP 表單點擊跳轉 (Google Form Redirect with heart burst animation)
-    // ==========================================================================
-    const redirectBtn = document.getElementById('rsvp-redirect-btn');
-    const loadingBox = document.getElementById('rsvp-loading-box');
-
-    // 點擊按鈕時飄出滿滿愛心的特效
-    function spawnFloatingHeart(x, y) {
-        const heart = document.createElement('div');
-        heart.innerHTML = '❤️';
-        heart.style.position = 'fixed';
-        heart.style.left = x + 'px';
-        heart.style.top = y + 'px';
-        heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
-        heart.style.pointerEvents = 'none';
-        heart.style.zIndex = '99999';
-        heart.style.transition = 'all 1.2s cubic-bezier(0.25, 1, 0.5, 1)';
-        
-        document.body.appendChild(heart);
-        
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 80 + 40;
-        const destX = x + Math.cos(angle) * distance;
-        const destY = y + Math.sin(angle) * distance - 80;
-        
-        setTimeout(() => {
-            heart.style.transform = `translate(${destX - x}px, ${destY - y}px) scale(0.5) rotate(${Math.random() * 90 - 45}deg)`;
-            heart.style.opacity = '0';
-        }, 10);
-        
-        setTimeout(() => {
-            heart.remove();
-        }, 1200);
-    }
-
-    if (redirectBtn && loadingBox) {
-        redirectBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // 取得按鈕座標中心點
-            const rect = redirectBtn.getBoundingClientRect();
-            const btnX = rect.left + rect.width / 2;
-            const btnY = rect.top + rect.height / 2;
-            
-            // 噴灑愛心效果
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    spawnFloatingHeart(btnX + (Math.random() * 40 - 20), btnY + (Math.random() * 20 - 10));
-                }, i * 35);
-            }
-            
-            // 按鈕動態回彈與縮小
-            redirectBtn.style.transform = 'scale(0.95)';
-            redirectBtn.style.opacity = '0.7';
-            redirectBtn.style.pointerEvents = 'none';
-            
-            // 顯示載入文字
-            loadingBox.style.display = 'block';
-            
-            // 延遲 1.2 秒後進行頁面跳轉
-            setTimeout(() => {
-                window.location.href = 'https://forms.gle/2Jqroc6Yz7DrAyEaA';
-            }, 1200);
-        });
-    }
-
-    // ==========================================================================
-    // 8. 加入行事曆整合功能 (Google Calendar & Apple/Outlook ICS)
-    // ==========================================================================
-    const btnGCal = document.getElementById('btn-gcal');
-    const btnICal = document.getElementById('btn-ical');
-
-    const weddingTitle = "祥宇&麗紘的婚禮";
-    const weddingDetails = "誠摯邀請您出席我們的婚宴！\n時間：12:00 入席\n地點：林邊永鑫海鮮餐廳 (屏東縣林邊鄉中山路379號)";
-    const weddingLocation = "林邊永鑫海鮮餐廳, 屏東縣林邊鄉中山路379號";
-    
-    // 2026年9月27日 12:00 至 16:30 (UTC+8 即 20260927T040000Z 至 20260927T083000Z)
-    const startDate = "20260927T120000";
-    const endDate = "20260927T163000";
-
-    // Google Calendar 連結
-    btnGCal.addEventListener('click', (e) => {
-        e.preventDefault();
-        const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(weddingTitle)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(weddingDetails)}&location=${encodeURIComponent(weddingLocation)}&sf=true&output=xml`;
-        window.open(gCalUrl, '_blank');
-    });
-
-    // Apple/Outlook .ics 檔案下載
-    btnICal.addEventListener('click', (e) => {
-        e.preventDefault();
-        const icsContent = 
-`BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Xiangyu and Lihong//Wedding Invitation//EN
-BEGIN:VEVENT
-UID:wedding-xiangyu-lihong-20260927
-DTSTART;TZID=Asia/Taipei:${startDate}
-DTEND;TZID=Asia/Taipei:${endDate}
-SUMMARY:${weddingTitle}
-DESCRIPTION:${weddingDetails.replace(/\n/g, '\\n')}
-LOCATION:${weddingLocation}
-BEGIN:VALARM
-TRIGGER:-PT24H
-ACTION:DISPLAY
-DESCRIPTION:明天就是祥宇與麗紘的大囍日子囉！
-END:VALARM
-END:VEVENT
-END:VCALENDAR`;
-
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.setAttribute('download', 'wedding_xiangyu_lihong.ics');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
-
-    // ==========================================================================
-    // 8.5 櫻花飄落特效 (Sakura Falling Animation)
-    // ==========================================================================
-    function initSakuraEffect() {
-        const canvas = document.getElementById('sakura-canvas');
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-        
-        // 監聽視窗縮放
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
-        
-        const petalCount = 45; // 櫻花瓣總數
-        const petals = [];
-        
-        class Petal {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height - height;
-                this.r = Math.random() * 6 + 5; // 花瓣半徑
-                this.d = Math.random() * 1.2 + 0.6; // 下落速度
-                this.swingSpeed = Math.random() * 0.015 + 0.005; // 搖擺速度
-                this.swingAngle = Math.random() * Math.PI * 2;
-                this.opacity = Math.random() * 0.35 + 0.5; // 透明度
-                this.flip = Math.random(); // 水平翻轉因子
-                this.flipSpeed = Math.random() * 0.02 + 0.01;
-            }
-            
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.swingAngle * 0.3);
-                ctx.scale(this.flip, 1);
-                
-                ctx.beginPath();
-                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.r);
-                grad.addColorStop(0, `rgba(255, 205, 215, ${this.opacity})`);
-                grad.addColorStop(0.8, `rgba(255, 182, 193, ${this.opacity})`);
-                grad.addColorStop(1, 'rgba(255, 182, 193, 0)');
-                ctx.fillStyle = grad;
-                
-                // 繪製微風中的櫻花瓣形狀
-                ctx.moveTo(0, 0);
-                ctx.bezierCurveTo(-this.r/2, -this.r/2, -this.r, this.r/3, 0, this.r);
-                ctx.bezierCurveTo(this.r, this.r/3, this.r/2, -this.r/2, 0, 0);
-                
-                ctx.fill();
-                ctx.restore();
-            }
-            
-            update() {
-                this.y += this.d;
-                this.swingAngle += this.swingSpeed;
-                this.x += Math.sin(this.swingAngle) * 0.4;
-                this.flip += this.flipSpeed;
-                
-                if (this.flip > 1 || this.flip < -1) {
-                    this.flipSpeed = -this.flipSpeed;
-                }
-                
-                // 超出邊界時重設
-                if (this.y > height) {
-                    this.y = -20;
-                    this.x = Math.random() * width;
-                    this.opacity = Math.random() * 0.35 + 0.5;
-                }
-                if (this.x > width) {
-                    this.x = 0;
-                } else if (this.x < 0) {
-                    this.x = width;
-                }
-            }
-        }
-        
-        // 初始生成
-        for (let i = 0; i < petalCount; i++) {
-            petals.push(new Petal());
-        }
-        
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            petals.forEach(petal => {
-                petal.update();
-                petal.draw();
             });
-            requestAnimationFrame(animate);
+            plusBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                let val = parseInt(input.value) || 0;
+                let max = parseInt(input.getAttribute('max')) || 10;
+                if (val < max) {
+                    input.value = val + 1;
+                }
+            });
         }
-        
-        animate();
-    }
+    });
 
-    // 啟動櫻花特效
-    initSakuraEffect();
+    // ==========================================================================
+    // 9. 滾動淡入觀察器 (Scroll Reveal)
+    // ==========================================================================
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+            }
+        });
+    }, { threshold: 0.1 });
 
+    revealElements.forEach(el => revealObserver.observe(el));
 });
